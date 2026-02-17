@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.simats.anxisense">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+
+        <!-- Splash Screen - Launcher Activity -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Authentication Activities -->
+        <activity
+            android:name=".DoctorLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityDoctorOTP"
+            android:exported="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DoctorDashboardActivity"
+            android:exported="false" /> <!-- Patient Management Activities -->
+        <activity
+            android:name=".PatientInformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PatientRecordsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileSettingsActivity"
+            android:exported="false" /> <!-- Assessment Activities -->
+        <activity
+            android:name=".AnxietyAnalysisActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AssessmentDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AssessmentHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QuickScanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FacialScanActivity"
+            android:exported="false" /> <!-- Analysis and Results Activities -->
+        <activity
+            android:name=".AnalysisActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AnalysisResultsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ScanResultActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>

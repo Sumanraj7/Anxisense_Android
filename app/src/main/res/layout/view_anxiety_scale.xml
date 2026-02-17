@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Scale Bar Container -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <!-- Gradient Scale Bar -->
+        <View
+            android:id="@+id/scaleBar"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:background="@drawable/bg_anxiety_scale_bar"/>
+
+        <!-- Level Markers (0-10) -->
+        <LinearLayout
+            android:id="@+id/levelMarkers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/scaleBar"
+            android:layout_alignBottom="@id/scaleBar"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <!-- Marker 0 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 1 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 2 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 3 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 4 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 5 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 6 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 7 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 8 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 9 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+            <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#FFFFFF" android:alpha="0.5"/>
+            
+            <!-- Marker 10 -->
+            <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- Level Numbers -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="2"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="3"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="4"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="5"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="6"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="7"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="8"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="9"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="10"
+            android:textAlignment="center"
+            android:textColor="#1A365D"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <!-- Category Labels -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="No Pain"
+            android:textAlignment="textStart"
+            android:textColor="#596275"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mild"
+            android:textAlignment="center"
+            android:textColor="#596275"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Moderate"
+            android:textAlignment="center"
+            android:textColor="#596275"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Severe"
+            android:textAlignment="center"
+            android:textColor="#596275"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Very Severe"
+            android:textAlignment="center"
+            android:textColor="#596275"
+            android:textSize="10sp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Worst Pain\nPossible"
+            android:textAlignment="textEnd"
+            android:textColor="#596275"
+            android:textSize="10sp"
+            android:maxLines="2"/>
+
+    </LinearLayout>
+
+</LinearLayout>

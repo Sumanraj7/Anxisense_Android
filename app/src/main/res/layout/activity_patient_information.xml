@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_light_blue"
+    tools:context=".PatientInformationActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Header Section -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="Back"
+                    android:src="@drawable/ic_arrow_back"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#1A365D" />
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Patient Information"
+                    android:textColor="#1A365D"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/btnBack"
+                    app:layout_constraintStart_toEndOf="@id/btnBack"
+                    app:layout_constraintTop_toTopOf="@id/btnBack" />
+
+                <TextView
+                    android:id="@+id/tvSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Enter patient details for assessment"
+                    android:textColor="#596275"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@id/tvTitle"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Icon Circle -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp">
+
+                <View
+                    android:id="@+id/bgIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_circle_light_blue"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="Person Icon"
+                    android:src="@drawable/ic_person"
+                    app:layout_constraintBottom_toBottomOf="@id/bgIcon"
+                    app:layout_constraintEnd_toEndOf="@id/bgIcon"
+                    app:layout_constraintStart_toStartOf="@id/bgIcon"
+                    app:layout_constraintTop_toTopOf="@id/bgIcon"
+                    app:tint="#1A365D" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Form Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <!-- Patient ID -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Patient ID *"
+                        android:textColor="#1A365D"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etPatientId"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_input_field"
+                        android:hint="e.g., P001234"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="#1A365D"
+                        android:textColorHint="#6B7280"
+                        android:textSize="14sp" />
+
+                    <!-- Full Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Full Name *"
+                        android:textColor="#1A365D"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etFullName"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_input_field"
+                        android:hint="Enter patient's full name"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="#1A365D"
+                        android:textColorHint="#6B7280"
+                        android:textSize="14sp" />
+
+                    <!-- Age & Gender Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Age *"
+                                android:textColor="#1A365D"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/etAge"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/bg_input_field"
+                                android:hint="Age"
+                                android:inputType="number"
+                                android:paddingHorizontal="16dp"
+                                android:textColor="#1A365D"
+                                android:textColorHint="#6B7280"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Gender"
+                                android:textColor="#1A365D"
+                                android:textStyle="bold" />
+
+                            <!-- Using Spinner for dropdown -->
+                            <Spinner
+                                android:id="@+id/spinnerGender"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/bg_input_field"
+                                android:paddingStart="8dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Procedure Type -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Procedure Type"
+                        android:textColor="#1A365D"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spinnerProcedure"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_input_field"
+                        android:paddingStart="8dp" />
+
+                    <!-- Health Issues -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Health Issues"
+                        android:textColor="#1A365D"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etHealthIssues"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_input_field"
+                        android:gravity="top|start"
+                        android:hint="Note any health issues, allergies, or relevant medical history"
+                        android:padding="16dp"
+                        android:textColor="#1A365D"
+                        android:textColorHint="#6B7280"
+                        android:textSize="14sp" />
+
+                    <!-- Previous Anxiety History -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Previous Anxiety History"
+                        android:textColor="#1A365D"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_input_field"
+                        android:gravity="top|start"
+                        android:hint="Note any previous anxiety episodes, m..."
+                        android:padding="16dp"
+                        android:textColor="#1A365D"
+                        android:textColorHint="#6B7280"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Note Section -->
+            <LinearLayout
+                android:id="@+id/noteSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_note_blue"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="Note:"
+                    android:textColor="#1A365D"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Patient information is encrypted and stored securely in compliance with HIPAA regulations."
+                    android:textColor="#1A365D"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Bottom Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_outline"
+                    android:text="Cancel"
+                    android:textAllCaps="false"
+                    android:textColor="#1A365D" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnProceed"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_button_primary"
+                    android:text="Proceed to Facial Scan"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
