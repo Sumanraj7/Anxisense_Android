@@ -56,41 +56,18 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_camera_alt"
-            app:tint="#718096" />
+            app:tint="@color/nav_unselected" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Scan"
-            android:textColor="#718096"
+            android:textColor="@color/nav_unselected"
             android:textSize="12sp" />
     </LinearLayout>
 
-    <!-- Nav Item 3: Analysis -->
-    <LinearLayout
-        android:id="@+id/navAnalysis"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="8dp">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_trending_up"
-            app:tint="#718096" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Analysis"
-            android:textColor="#718096"
-            android:textSize="12sp" />
-    </LinearLayout>
 
     <!-- Nav Item 4: Records -->
     <LinearLayout
@@ -106,14 +83,14 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_assignment"
-            app:tint="#718096" />
+            app:tint="@color/nav_unselected" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Records"
-            android:textColor="#718096"
+            android:textColor="@color/nav_unselected"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -131,14 +108,14 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_person"
-            app:tint="#718096" />
+            app:tint="@color/nav_unselected" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Profile"
-            android:textColor="#718096"
+            android:textColor="@color/nav_unselected"
             android:textSize="12sp" />
     </LinearLayout>
 

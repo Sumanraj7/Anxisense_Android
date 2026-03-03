@@ -28,7 +28,7 @@ import androidx.camera.view.PreviewView
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.material.button.MaterialButton
+import androidx.appcompat.widget.AppCompatButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
@@ -62,9 +62,9 @@ class FacialScanActivity : AppCompatActivity() {
     private lateinit var cardScanningStatus: CardView
     private lateinit var layoutScanProgress: LinearLayout
     private lateinit var layoutActionButtons: LinearLayout
-    private lateinit var btnStartScan: MaterialButton
-    private lateinit var btnCapturePhoto: MaterialButton
-    private lateinit var btnStopScan: MaterialButton
+    private lateinit var btnStartScan: AppCompatButton
+    private lateinit var btnCapturePhoto: AppCompatButton
+    private lateinit var btnStopScan: AppCompatButton
     private lateinit var ivUploadedImage: ImageView
     
     // State variables
@@ -573,6 +573,7 @@ class FacialScanActivity : AppCompatActivity() {
         val patientName = intent.getStringExtra("PATIENT_NAME") ?: "Unknown"
         val patientId = intent.getStringExtra("PATIENT_ID") ?: "N/A"
         val internalPatientId = intent.getIntExtra("INTERNAL_PATIENT_ID", -1)
+        val isQuickScan = intent.getBooleanExtra("IS_QUICK_SCAN", false)
 
         val finalImageUriString = imagePath ?: uploadedImageUri?.toString()
 
@@ -590,6 +591,7 @@ class FacialScanActivity : AppCompatActivity() {
             if (internalPatientId != -1) {
                 putExtra("INTERNAL_PATIENT_ID", internalPatientId)
             }
+            putExtra("IS_QUICK_SCAN", isQuickScan)
             putExtra("IMAGE_URI", finalImageUriString)
 
             // Grant URI permission if it is a content URI

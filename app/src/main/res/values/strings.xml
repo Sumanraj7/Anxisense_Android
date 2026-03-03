@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">AnxiSense</string>
+    
+    <!-- Login Screen -->
+    <string name="login_title">AnxietySense</string>
+    <string name="login_subtitle">CLINICAL ANALYSIS SUITE</string>
+    <string name="lbl_professional_email">Professional Email</string>
+    <string name="hint_email">doctor@hospital.org</string>
+    <string name="btn_continue_securely">Continue Securely</string>
+    <string name="badge_hipaa">🔒 HIPAA Compliant</string>
+    <string name="badge_medical_grade">⚕️ Medical Grade</string>
+    
+    <!-- OTP Screen -->
+    <string name="otp_title">Doctor Login</string>
+    <string name="otp_subtitle">Secure access for medical professionals</string>
+    <string name="lbl_email_address">Email Address</string>
+    <string name="lbl_enter_otp">Enter OTP</string>
+    <string name="hint_otp">Enter 6-digit OTP</string>
+    <string name="btn_verify_login">Verify &amp; Login</string>
+    <string name="btn_resend_otp">Resend OTP</string>
+    <string name="privacy_security_title">Privacy &amp; Security</string>
+    <string name="privacy_security_desc">Patient data is encrypted and secure. All assessments are HIPAA compliant.</string>
 </resources>

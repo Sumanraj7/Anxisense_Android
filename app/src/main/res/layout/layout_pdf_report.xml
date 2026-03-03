@@ -176,6 +176,23 @@
                     android:textStyle="bold"
                     android:textColor="#2D3748"/>
             </LinearLayout>
+
+            <!-- Column 4: Patient Photo (New) -->
+             <androidx.cardview.widget.CardView
+                android:id="@+id/pdfPhotoContainer"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="0dp"
+                android:layout_gravity="center">
+                <ImageView
+                    android:id="@+id/pdfPatientPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher"
+                    android:background="#F1F5F9"/>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
         
         <!-- Assessment Result Section -->
@@ -253,14 +270,13 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#1A365D"/>
-                        
+
                     <TextView
-                        android:id="@+id/pdfInterpretation"
+                        android:id="@+id/pdfDominantEmotion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Patient exhibits significant signs of physiological stress and elevated anxiety markers."
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:textColor="#4A5568"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>
@@ -285,7 +301,10 @@
             android:background="#1A365D"/>
             
         <!-- Table Header -->
+        <!-- Table Header -->
+        <!-- Table Header -->
          <LinearLayout
+            android:id="@+id/pdfMetricsHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -296,15 +315,15 @@
             <TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Status" android:textStyle="bold" android:textSize="12sp" android:textColor="#2D3748"/>
         </LinearLayout>
         
-        <!-- Row 1 -->
+        <!-- Dynamic Metrics Container -->
         <LinearLayout
+            android:id="@+id/pdfDynamicMetricsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingVertical="16dp">
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:paddingStart="16dp" android:text="Dominant Emotion" android:textSize="13sp" android:textColor="#4A5568"/>
-            <TextView android:id="@+id/pdfDominantEmotion" android:layout_width="100dp" android:layout_height="wrap_content" android:text="Fear" android:textStyle="bold" android:textSize="13sp" android:textColor="#2D3748"/>
-            <TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Detected" android:textSize="13sp" android:textColor="#1A365D"/>
+            android:orientation="vertical">
+            
+            <!-- Rows will be added here programmatically -->
+            
         </LinearLayout>
         <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E2E8F0"/>
         
@@ -316,7 +335,7 @@
             android:paddingVertical="16dp">
             <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:paddingStart="16dp" android:text="Micro-expressions" android:textSize="13sp" android:textColor="#4A5568"/>
             <TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Elevated" android:textStyle="bold" android:textSize="13sp" android:textColor="#2D3748"/>
-            <TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Warning" android:textSize="13sp" android:textColor="#ED8936"/>
+            <TextView android:layout_width="100dp" android:layout_height="wrap_content" android.text="Warning" android:textSize="13sp" android:textColor="#ED8936"/>
         </LinearLayout>
         <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E2E8F0"/>
         

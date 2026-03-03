@@ -10,6 +10,7 @@ import ssl
 
 from decimal import Decimal
 from datetime import datetime, date
+import traceback
 # --------------------
 # Load environment variables
 # --------------------
@@ -19,8 +20,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
 bcrypt = Bcrypt(app)
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads")
+PROFILE_UPLOAD_FOLDER = os.path.join(UPLOAD_FOLDER, "profiles")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(PROFILE_UPLOAD_FOLDER, exist_ok=True)
 
 # --------------------
 # Database Connection
@@ -81,6 +84,11 @@ elif not app.debug:
 def home():
     return {"message": "AnxiSense Backend Running"}
 
+@app.route("/uploads/profiles/<filename>")
+def serve_profile_photo(filename):
+    from flask import send_from_directory
+    return send_from_directory(PROFILE_UPLOAD_FOLDER, filename)
+
 
 # ----------------------------
 # Anxiety score calculation
@@ -96,9 +104,9 @@ def calculate_anxiety(emotions):
             0.2 * surprise
     )
 
-    if anxiety_score < 30:
+    if anxiety_score < 40:
         level = "Low"
-    elif anxiety_score < 60:
+    elif anxiety_score < 70:
         level = "Moderate"
     else:
         level = "High"
@@ -167,274 +175,9 @@ def analyze_face():
         if os.path.exists(filepath):
             os.remove(filepath)
 
-# ----------------------------
-# Email Helper Function
-# ----------------------------
-
-@app.route("/api/patients", methods=["POST"])
-def create_patient():
-    print("patient start")
-    db = None
-    cursor = None
-    try:
-        data = request.get_json(silent=True) or {}
-
-        # Required fields
-        doctorid = data.get("doctorid")
-        fullname = data.get("fullname")
-
-        # Optional fields
-        patientid = data.get("patientid")  # can be None
-        age = data.get("age")
-        gender = data.get("gender")
-        proceduretype = data.get("proceduretype")
-        healthissue = data.get("healthissue")
-        previousanxietyhistory = data.get("previousanxietyhistory")
-
-        # Basic validation
-        if doctorid is None or str(doctorid).strip() == "":
-            return jsonify({"success": False, "message": "doctorid is required"}), 400
-
-        if not fullname or str(fullname).strip() == "":
-            return jsonify({"success": False, "message": "fullname is required"}), 400
-
-        db = get_db_connection()
-        cursor = db.cursor()
-
-        # Insert (id is auto_increment)
-        cursor.execute("""
-            INSERT INTO patients
-            (patientid, doctorid, fullname, age, gender, proceduretype, healthissue, previousanxietyhistory)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """, (
-            patientid,
-            doctorid,
-            fullname,
-            age,
-            gender,
-            proceduretype,
-            healthissue,
-            previousanxietyhistory
-        ))
-
-        db.commit()
-        inserted_id = cursor.lastrowid
-
-        return jsonify({
-            "success": True,
-            "message": "Patient added successfully",
-            "data": {
-                "id": inserted_id,          # ✅ auto_increment id
-                "patientid": patientid,
-                "doctorid": doctorid,
-                "fullname": fullname,
-                "age": age,
-                "gender": gender,
-                "proceduretype": proceduretype,
-                "healthissue": healthissue,
-                "previousanxietyhistory": previousanxietyhistory
-            }
-        }), 201
-
-    except MySQLdb.IntegrityError as e:
-        # Duplicate keys / constraint issues
-        return jsonify({"success": False, "message": "Database integrity error", "error": str(e)}), 409
-
-    except Exception as e:
-        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
-
-    finally:
-        if cursor:
-            cursor.close()
-        if db:
-            db.close()
 
 
-@app.route("/api/patients", methods=["GET"])
-def get_patients():
-    db = None
-    cursor = None
-    try:
-        doctorid = request.args.get("doctorid")
-
-        if not doctorid:
-            return jsonify({"success": False, "message": "doctorid is required"}), 400
-
-        try:
-            doctorid_int = int(doctorid)
-        except ValueError:
-            return jsonify({"success": False, "message": "Invalid doctorid format"}), 400
-
-        print(f"DEBUG: Fetching patients for Doctor ID: {doctorid_int}", flush=True)
-
-        db = get_db_connection()
-        cursor = db.cursor(MySQLdb.cursors.DictCursor)
-
-        # Fetch patients with their LATEST assessment score
-        query = """
-            SELECT p.*, 
-                   a.anxiety_score as latest_anxiety_score, 
-                   a.anxiety_level as latest_anxiety_level,
-                   a.created_at as last_assessment_date
-            FROM patients p
-            LEFT JOIN (
-                SELECT patient_id, anxiety_score, anxiety_level, created_at
-                FROM assessments a1
-                WHERE id = (
-                    SELECT MAX(id) FROM assessments a2 WHERE a2.patient_id = a1.patient_id
-                )
-            ) a ON p.id = a.patient_id
-            WHERE p.doctorid = %s
-            ORDER BY p.id DESC
-        """
-        
-        cursor.execute(query, (doctorid_int,))
-        patients = cursor.fetchall()
-        
-        print(f"DEBUG: Found {len(patients)} patients for Doctor ID: {doctorid_int}", flush=True)
-        
-        # Handle datetime serialization
-        for p in patients:
-            for k, v in p.items():
-                if isinstance(v, (datetime, date)):
-                    p[k] = v.strftime("%Y-%m-%d %H:%M:%S")
-                # Handle Decimal serialization if using Decimal type for scores
-                if isinstance(v, Decimal):
-                    p[k] = float(v)
-
-        return jsonify({
-            "success": True,
-            "data": patients
-        }), 200
-
-    except Exception as e:
-        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
-
-    finally:
-        if cursor:
-            cursor.close()
-        if db:
-            db.close()
-
-
-@app.route("/api/assessments", methods=["POST"])
-def save_assessment():
-    db = None
-    cursor = None
-    try:
-        data = request.get_json(silent=True) or {}
-        
-        patient_id = data.get("patient_id")
-        doctor_id = data.get("doctor_id")
-        anxiety_score = data.get("anxiety_score")
-        anxiety_level = data.get("anxiety_level")
-        dominant_emotion = data.get("dominant_emotion")
-        
-        if patient_id is None or doctor_id is None or anxiety_score is None or anxiety_level is None:
-             return jsonify({"success": False, "message": "Missing required fields"}), 400
-
-        db = get_db_connection()
-        cursor = db.cursor()
-
-        cursor.execute("""
-            INSERT INTO assessments 
-            (patient_id, doctor_id, anxiety_score, anxiety_level, dominant_emotion)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (patient_id, doctor_id, anxiety_score, anxiety_level, dominant_emotion))
-        
-        db.commit()
-        
-        return jsonify({
-            "success": True, 
-            "message": "Assessment saved successfully",
-            "id": cursor.lastrowid
-        }), 201
-
-    except Exception as e:
-        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
-
-    finally:
-        if cursor:
-            cursor.close()
-        if db:
-            db.close()
-
-
-
-# ----------------------------
-# Retrieve Assessments (History)
-# ----------------------------
-@app.route("/api/assessments", methods=["GET"])
-def get_assessments():
-    db = None
-    cursor = None
-    try:
-        doctor_id = request.args.get("doctorid")
-        patient_id = request.args.get("patientid")
-        
-        if not doctor_id and not patient_id:
-             return jsonify({"success": False, "message": "Either doctorid or patientid is required"}), 400
-
-        # Strict integer validation
-        if doctor_id:
-            try:
-                doctor_id = int(doctor_id)
-            except ValueError:
-                return jsonify({"success": False, "message": "Invalid doctorid format"}), 400
-
-        db = get_db_connection()
-        cursor = db.cursor(MySQLdb.cursors.DictCursor)
-        
-        # Base query joining patients to get names
-        query = """
-            SELECT a.*, p.fullname as patient_name, p.patientid as patient_code
-            FROM assessments a
-            JOIN patients p ON a.patient_id = p.id
-        """
-        
-        params = []
-        if patient_id:
-             # Safety check for patient_id too
-            try:
-                patient_id = int(patient_id)
-                query += " WHERE a.patient_id = %s"
-                params.append(patient_id)
-            except ValueError:
-                pass # or handle error
-
-        elif doctor_id:
-            print(f"DEBUG: Fetching assessments for Doctor ID: {doctor_id}", flush=True)
-            # If fetching for doctor, we filter by doctor_id on assessments table
-            query += " WHERE a.doctor_id = %s"
-            params.append(doctor_id)
-            
-        query += " ORDER BY a.created_at DESC LIMIT 50"
-        
-        cursor.execute(query, tuple(params))
-        assessments = cursor.fetchall()
-        
-        print(f"DEBUG: Found {len(assessments)} assessments", flush=True)
-
-        # Convert datetime objects to string
-        for a in assessments:
-            if 'created_at' in a and a['created_at']:
-                a['created_at'] = a['created_at'].strftime("%Y-%m-%d %H:%M:%S")
-
-        return jsonify({
-            "success": True,
-            "data": assessments
-        }), 200
-
-    except Exception as e:
-        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
-
-    finally:
-        if cursor:
-            cursor.close()
-        if db:
-            db.close()
-
-# Register a new doctor (Admin only - should be protected in production)
+# Register a new doctor (Admin only - should be protect in production)
 @app.route("/api/doctor/register", methods=["POST"])
 def register_doctor():
     db = None
@@ -477,6 +220,10 @@ def register_doctor():
             db.close()
 
 
+# ----------------------------
+# Email Helper Function
+# ----------------------------
+
 def send_email(receiver_email, subject, body):
     sender_email = os.getenv("EMAIL_USER")
     password = os.getenv("EMAIL_PASS")
@@ -494,14 +241,28 @@ def send_email(receiver_email, subject, body):
     context = ssl.create_default_context()
 
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls(context=context)
+        # Switching to port 465 (SSL) for better reliability
+        print(f"DEBUG: Attempting to send email to {receiver_email} via smtp.gmail.com:465")
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context, timeout=30) as server:
             server.login(sender_email, password)
             server.send_message(msg)
+            print(f"DEBUG: Email sent successfully to {receiver_email}")
         return True
     except Exception as e:
-        print(f"Error sending email: {e}")
-        return False
+        print(f"ERROR Sending Email: {e}")
+        # Fallback to port 587 if 465 fails
+        try:
+             print(f"DEBUG: Attempting fallback to smtp.gmail.com:587")
+             with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as server:
+                server.starttls(context=context)
+                server.login(sender_email, password)
+                server.send_message(msg)
+                print(f"DEBUG: Fallback email sent successfully")
+             return True
+        except Exception as fe:
+            print(f"FALLBACK ERROR: {fe}")
+            traceback.print_exc()
+            return False
 
 
 @app.route("/api/doctor/send-otp", methods=["POST"])
@@ -510,7 +271,7 @@ def send_otp():
     cursor = None
     try:
         data = request.get_json()
-        email = data.get("email")
+        email = data.get("email", "").strip()
 
         if not email:
             return jsonify({"message": "Email is required"}), 400
@@ -594,13 +355,31 @@ def verify_otp():
             cursor.execute("UPDATE doctors SET otp=NULL WHERE email=%s", (email,))
             db.commit()
 
+            # Get profile info to send in email
+            cursor.execute("SELECT id, username, email, fullname, phone, specialization, clinic_name FROM doctors WHERE email=%s", (email,))
+            prof = cursor.fetchone()
+            
+            subject = "AnxiSense: Successful Login"
+            body = f"Hello Dr. {prof['fullname'] or prof['username']},\n\n"
+            body += "You have successfully logged into your AnxiSense account.\n\n"
+            body += "Current Profile Details:\n"
+            body += f"Name: {prof['fullname'] or 'N/A'}\n"
+            body += f"Email: {prof['email']}\n"
+            body += f"Phone: {prof['phone'] or 'N/A'}\n"
+            body += f"Specialization: {prof['specialization'] or 'N/A'}\n"
+            body += f"Clinic: {prof['clinic_name'] or 'N/A'}\n"
+            body += "\nIf this login was not you, please secure your account."
+            
+            send_email(email, subject, body)
+
             return jsonify({
                 "message": "OTP verified successfully",
                 "success": True,
                 "doctor": {
-                    "id": doctor["id"],
-                    "username": doctor["username"],
-                    "email": doctor["email"]
+                    "id": prof["id"],
+                    "username": prof["username"],
+                    "email": prof["email"],
+                    "fullname": prof["fullname"]
                 }
             }), 200
         else:
@@ -632,11 +411,17 @@ def get_doctor_profile():
         db = get_db_connection()
         cursor = db.cursor(MySQLdb.cursors.DictCursor)
         
-        cursor.execute("SELECT id, username, email, fullname, phone, specialization, clinic_name FROM doctors WHERE id=%s", (doctor_id,))
+        cursor.execute("SELECT id, username, email, fullname, phone, specialization, clinic_name, profile_photo FROM doctors WHERE id=%s", (doctor_id,))
         doctor = cursor.fetchone()
         
         if not doctor:
             return jsonify({"success": False, "message": "Doctor not found"}), 404
+        
+        # Add full URL for profile photo
+        if doctor.get("profile_photo"):
+            # Ensure URL is reachable: if request.host is 0.0.0.0, use the request host
+            host = request.host
+            doctor["profile_photo"] = f"http://{host}/uploads/profiles/{doctor['profile_photo']}"
             
         return jsonify({
             "success": True,
@@ -693,14 +478,33 @@ def update_doctor_profile():
         params.append(doctor_id)
 
         db = get_db_connection()
-        cursor = db.cursor()
+        cursor = db.cursor(MySQLdb.cursors.DictCursor)
         
+        # Get doctor email first
+        cursor.execute("SELECT email, username FROM doctors WHERE id=%s", (doctor_id,))
+        doctor = cursor.fetchone()
+        if not doctor:
+            return jsonify({"success": False, "message": "Doctor not found"}), 404
+            
+        doctor_email = doctor["email"]
+
         cursor.execute(query, tuple(params))
         db.commit()
         
+        # Send confirmation email
+        subject = "AnxiSense: Profile Updated"
+        body = f"Hello Dr. {fullname or doctor['username']},\n\nYour profile details have been updated successfully.\n\n"
+        if fullname: body += f"Full Name: {fullname}\n"
+        if phone: body += f"Phone: {phone}\n"
+        if specialization: body += f"Specialization: {specialization}\n"
+        if clinic_name: body += f"Clinic: {clinic_name}\n"
+        body += "\nIf you did not make these changes, please contact support."
+        
+        send_email(doctor_email, subject, body)
+        
         return jsonify({
             "success": True, 
-            "message": "Profile updated successfully"
+            "message": "Profile updated successfully and notification sent to your email"
         }), 200
 
     except Exception as e:
@@ -712,6 +516,76 @@ def update_doctor_profile():
         if db:
             db.close()
 
+
+@app.route("/api/doctor/profile-photo", methods=["POST"])
+def upload_profile_photo():
+    db = None
+    cursor = None
+    try:
+        doctor_id = request.form.get("doctorid")
+        if not doctor_id:
+            return jsonify({"success": False, "message": "doctorid is required"}), 400
+
+        if "image" not in request.files:
+            return jsonify({"success": False, "message": "No image uploaded"}), 400
+
+        image_file = request.files["image"]
+        if image_file.filename == "":
+            return jsonify({"success": False, "message": "No image selected"}), 400
+
+        # Create unique filename
+        ext = os.path.splitext(image_file.filename)[1]
+        if not ext:
+            ext = ".jpg"
+        filename = f"profile_{doctor_id}_{int(datetime.now().timestamp())}{ext}"
+        filepath = os.path.join(PROFILE_UPLOAD_FOLDER, filename)
+        
+        print(f"DEBUG: Saving profile photo to {filepath}")
+        image_file.save(filepath)
+        print(f"DEBUG: Saved successfully. File size: {os.path.getsize(filepath)} bytes")
+
+        db = get_db_connection()
+        cursor = db.cursor(MySQLdb.cursors.DictCursor)
+        
+        # Get doctor email first
+        cursor.execute("SELECT email, username, profile_photo FROM doctors WHERE id=%s", (doctor_id,))
+        doctor = cursor.fetchone()
+        if not doctor:
+            return jsonify({"success": False, "message": "Doctor not found"}), 404
+
+        # Delete old photo file
+        if doctor.get("profile_photo"):
+            old_path = os.path.join(PROFILE_UPLOAD_FOLDER, doctor["profile_photo"])
+            if os.path.exists(old_path):
+                try: os.remove(old_path)
+                except: pass
+
+        cursor.execute("UPDATE doctors SET profile_photo=%s WHERE id=%s", (filename, doctor_id))
+        db.commit()
+
+        host = request.host
+        photo_url = f"http://{host}/uploads/profiles/{filename}"
+        
+        # Send confirmation email
+        send_email(
+            doctor["email"], 
+            "AnxiSense: Profile Photo Updated", 
+            f"Hello Dr. {doctor['username']},\n\nYour profile photo has been updated successfully.\n\nView it here: {photo_url}"
+        )
+        
+        return jsonify({
+            "success": True,
+            "message": "Profile photo updated successfully and notification sent",
+            "profile_photo": photo_url
+        }), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
 
 
 @app.route("/api/doctor/dashboard-stats", methods=["GET"])
@@ -761,10 +635,279 @@ def get_dashboard_stats():
         if db: 
             db.close()
 
+@app.route("/api/patients", methods=["POST"])
+def create_patient():
+    print(f"✅ /api/patients HIT with data: {request.get_json(silent=True)}", flush=True)
+    db = None
+    cursor = None
+    try:
+        data = request.get_json(silent=True) or {}
 
-# --------------------
-# RUN APP (LAST LINE)
-# --------------------
+        # Required fields
+        doctorid = data.get("doctorid")
+        fullname = data.get("fullname")
+
+        # Optional fields
+        patientid = data.get("patientid")  # can be None
+        age = data.get("age")
+        gender = data.get("gender")
+        proceduretype = data.get("proceduretype")
+        healthissue = data.get("healthissue")
+        previousanxietyhistory = data.get("previousanxietyhistory")
+
+        # Basic validation
+        if doctorid is None or str(doctorid).strip() == "":
+            return jsonify({"success": False, "message": "doctorid is required"}), 400
+
+        if not fullname or str(fullname).strip() == "":
+            return jsonify({"success": False, "message": "fullname is required"}), 400
+
+        db = get_db_connection()
+        cursor = db.cursor()
+
+        # Insert (id is auto_increment)
+        cursor.execute("""
+            INSERT INTO patients
+            (patientid, doctorid, fullname, age, gender, proceduretype, healthissue, previousanxietyhistory)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            patientid,
+            doctorid,
+            fullname,
+            age,
+            gender,
+            proceduretype,
+            healthissue,
+            previousanxietyhistory
+        ))
+
+        db.commit()
+        inserted_id = cursor.lastrowid
+
+        return jsonify({
+            "success": True,
+            "message": "Patient added successfully",
+            "data": {
+                "id": inserted_id,          # ✅ auto_increment id
+                "patientid": patientid,
+                "doctorid": doctorid,
+                "fullname": fullname,
+                "age": age,
+                "gender": gender,
+                "proceduretype": proceduretype,
+                "healthissue": healthissue,
+                "previousanxietyhistory": previousanxietyhistory
+            }
+        }), 201
+
+    except MySQLdb.IntegrityError as e:
+        # Duplicate keys / constraint issues
+        return jsonify({"success": False, "message": "Database integrity error", "error": str(e)}), 409
+
+    except Exception as e:
+        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
+
+
+@app.route("/api/patients", methods=["GET"])
+def get_patients():
+    db = None
+    cursor = None
+    try:
+        doctorid = request.args.get("doctorid")
+        page = request.args.get("page", 1, type=int)
+        limit = request.args.get("limit", 10, type=int)
+        offset = (page - 1) * limit
+
+        if not doctorid:
+            return jsonify({"success": False, "message": "doctorid is required"}), 400
+
+        try:
+            doctorid_int = int(doctorid)
+        except ValueError:
+            return jsonify({"success": False, "message": "Invalid doctorid format"}), 400
+
+        db = get_db_connection()
+        cursor = db.cursor(MySQLdb.cursors.DictCursor)
+
+        # Get Total Count first
+        cursor.execute("SELECT COUNT(*) as total FROM patients WHERE doctorid = %s", (doctorid_int,))
+        total_patients = cursor.fetchone()["total"]
+        total_pages = (total_patients + limit - 1) // limit
+        
+        print(f"DEBUG: doctorid={doctorid_int}, page={page}, limit={limit}, offset={offset}", flush=True)
+        print(f"DEBUG: total_patients={total_patients}, total_pages={total_pages}", flush=True)
+
+        # Fetch patients with pagination
+        query = """
+            SELECT p.*, 
+                   a.anxiety_score as latest_anxiety_score, 
+                   a.anxiety_level as latest_anxiety_level,
+                   a.created_at as last_assessment_date
+            FROM patients p
+            LEFT JOIN (
+                SELECT patient_id, anxiety_score, anxiety_level, created_at
+                FROM assessments a1
+                WHERE id = (
+                    SELECT MAX(id) FROM assessments a2 WHERE a2.patient_id = a1.patient_id
+                )
+            ) a ON p.id = a.patient_id
+            WHERE p.doctorid = %s
+            ORDER BY p.id DESC
+            LIMIT %s OFFSET %s
+        """
+        
+        cursor.execute(query, (int(doctorid_int), int(limit), int(offset)))
+        patients = cursor.fetchall()
+        print(f"DEBUG: Fetched {len(patients)} patients from DB", flush=True)
+        
+        # Handle datetime serialization
+        for p in patients:
+            for k, v in p.items():
+                if isinstance(v, (datetime, date)):
+                    p[k] = v.strftime("%Y-%m-%d %H:%M:%S")
+                if isinstance(v, Decimal):
+                    p[k] = float(v)
+
+        return jsonify({
+            "success": True,
+            "data": patients,
+            "pagination": {
+                "total_count": total_patients,
+                "total_pages": total_pages,
+                "current_page": page,
+                "limit": limit
+            }
+        }), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
+
+
+@app.route("/api/assessments", methods=["POST"])
+def save_assessment():
+    db = None
+    cursor = None
+    try:
+        data = request.get_json(silent=True) or {}
+        
+        patient_id = data.get("patient_id")
+        doctor_id = data.get("doctor_id")
+        anxiety_score = data.get("anxiety_score")
+        anxiety_level = data.get("anxiety_level")
+        dominant_emotion = data.get("dominant_emotion")
+        
+        if patient_id is None or doctor_id is None or anxiety_score is None or anxiety_level is None:
+             return jsonify({"success": False, "message": "Missing required fields"}), 400
+
+        db = get_db_connection()
+        cursor = db.cursor()
+
+        cursor.execute("""
+            INSERT INTO assessments 
+            (patient_id, doctor_id, anxiety_score, anxiety_level, dominant_emotion)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (patient_id, doctor_id, anxiety_score, anxiety_level, dominant_emotion))
+        
+        db.commit()
+        
+        return jsonify({
+            "success": True, 
+            "message": "Assessment saved successfully",
+            "id": cursor.lastrowid
+        }), 201
+
+    except Exception as e:
+        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
+
+@app.route("/api/assessments", methods=["GET"])
+def get_assessments():
+    db = None
+    cursor = None
+    try:
+        doctor_id = request.args.get("doctorid")
+        patient_id = request.args.get("patientid")
+        
+        if not doctor_id and not patient_id:
+             return jsonify({"success": False, "message": "Either doctorid or patientid is required"}), 400
+
+        # Strict integer validation
+        if doctor_id:
+            try:
+                doctor_id = int(doctor_id)
+            except ValueError:
+                return jsonify({"success": False, "message": "Invalid doctorid format"}), 400
+
+        db = get_db_connection()
+        cursor = db.cursor(MySQLdb.cursors.DictCursor)
+        
+        # Base query joining patients to get names
+        query = """
+            SELECT a.*, p.fullname as patient_name, p.patientid as patient_code
+            FROM assessments a
+            JOIN patients p ON a.patient_id = p.id
+        """
+        
+        params = []
+        if patient_id:
+             # Safety check for patient_id too
+            try:
+                patient_id = int(patient_id)
+                query += " WHERE a.patient_id = %s"
+                params.append(patient_id)
+            except ValueError:
+                pass # or handle error
+
+        elif doctor_id:
+            print(f"DEBUG: Fetching assessments for Doctor ID: {doctor_id}", flush=True)
+            # If fetching for doctor, we filter by doctor_id on assessments table
+            query += " WHERE a.doctor_id = %s"
+            params.append(doctor_id)
+            
+        query += " ORDER BY a.created_at DESC LIMIT 50"
+        
+        cursor.execute(query, tuple(params))
+        assessments = cursor.fetchall()
+        
+        print(f"DEBUG: Found {len(assessments)} assessments", flush=True)
+
+        # Convert datetime objects to string
+        for a in assessments:
+            if 'created_at' in a and a['created_at']:
+                a['created_at'] = a['created_at'].strftime("%Y-%m-%d %H:%M:%S")
+
+        return jsonify({
+            "success": True,
+            "message": "Assessments retrieved successfully",
+            "data": assessments
+        }), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": "Server error", "error": str(e)}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)

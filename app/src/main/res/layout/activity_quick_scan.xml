@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_nature_gradient"
+    android:background="@color/app_background"
     tools:context=".QuickScanActivity">
 
     <!-- Content Container -->
@@ -19,7 +19,8 @@
             android:id="@+id/bgIconCircle"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:background="@drawable/bg_glass_card"
+            android:background="@drawable/bg_card_rounded"
+            android:backgroundTint="@color/card_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Quick Scan"
-            android:textColor="@color/forest_green"
+            android:textColor="@color/text_primary"
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Start a new anxiety assessment"
-            android:textColor="@color/nature_text_secondary"
+            android:textColor="@color/text_secondary"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="56dp"
             android:layout_marginTop="32dp"
-            android:background="@drawable/bg_button_nature"
+            android:background="@drawable/bg_card_rounded"
+            android:backgroundTint="@color/blue_dark"
             android:paddingHorizontal="48dp"
             android:text="Begin Assessment"
             android:textAllCaps="false"

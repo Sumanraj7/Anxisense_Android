@@ -28,18 +28,18 @@ class AssessmentDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assessment_detail)
 
-        val scrollView = findViewById<NestedScrollView>(R.id.detailScrollView)
-
+        val tvPatientTitle = findViewById<TextView>(R.id.tvPatientTitle)
+        val tvPatientSubtitle = findViewById<TextView>(R.id.tvPatientSubtitle)
+        
+        val tvScoreLarge = findViewById<TextView>(R.id.tvScoreLarge)
+        val tvStatusBadge = findViewById<TextView>(R.id.tvStatusBadge)
+        val pbAnxietyCircleDetail = findViewById<android.widget.ProgressBar>(R.id.pbAnxietyCircleDetail)
+        val tvInterpretationSummary = findViewById<TextView>(R.id.tvInterpretationSummary)
+        val tvAnalysisDate = findViewById<TextView>(R.id.tvAnalysisDate)
+        
         val btnBack = findViewById<ImageView>(R.id.btnBack)
         val btnFinish = findViewById<AppCompatButton>(R.id.btnFinish)
         val btnExport = findViewById<AppCompatButton>(R.id.btnExport)
-
-        val tvPatientSubtitle = findViewById<TextView>(R.id.tvPatientSubtitle)
-        val tvScoreLarge = findViewById<TextView>(R.id.tvScoreLarge)
-        val tvStatusBadge = findViewById<TextView>(R.id.tvStatusBadge)
-        val tvNumericLevel = findViewById<TextView>(R.id.tvNumericLevel)
-        val ivAnxietyEmojiDetail = findViewById<ImageView>(R.id.ivAnxietyEmojiDetail)
-        val assessmentScoreCard = findViewById<CardView>(R.id.assessmentScoreCard)
 
         // Retrieve data from intent
         val patientName = intent.getStringExtra("patient_name") ?: "Unknown Patient"
@@ -56,13 +56,37 @@ class AssessmentDetailActivity : AppCompatActivity() {
         val anxietyLevelData = AnxietyLevelUtils.getAnxietyLevelFromPercentage(percentage)
 
         // Set data
-        tvPatientSubtitle.text = "$patientName • $patientId\n$date"
-        tvScoreLarge.text = anxietyScore
-        tvNumericLevel.text = "${anxietyLevelData.level}/10"
+        tvPatientTitle.text = patientName
+        tvPatientSubtitle.text = "ID: $patientId"
+        tvAnalysisDate.text = date
+        
+        tvScoreLarge.text = percentage.toString()
         tvStatusBadge.text = anxietyLevel
-        ivAnxietyEmojiDetail.setImageResource(anxietyLevelData.emojiResId)
+        pbAnxietyCircleDetail.progress = percentage
 
-        assessmentScoreCard.setCardBackgroundColor(anxietyLevelData.color)
+        // Color Logic
+        val colorHex = when {
+            percentage < 30 -> "#059669" // Green
+            percentage < 60 -> "#EA580C" // Orange
+            else -> "#DC2626" // Red
+        }
+        val lightColor = when {
+            percentage < 30 -> "#ECFDF5"
+            percentage < 60 -> "#FFF7ED"
+            else -> "#FEF2F2"
+        }
+
+        pbAnxietyCircleDetail.progressTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(colorHex))
+        tvStatusBadge.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(lightColor))
+        tvStatusBadge.setTextColor(Color.parseColor(colorHex))
+        
+        tvInterpretationSummary.text = when {
+            percentage < 30 -> "The AI detected low physiological stress markers. The patient appears relatively stable."
+            percentage < 60 -> "The AI detected moderate physiological stress markers consistent with elevated anxiety levels."
+            else -> "The AI detected high physiological stress markers. Immediate attention to patient comfort is advised."
+        }
+
+        findViewById<TextView>(R.id.tvDominantEmotion).text = dominantEmotion
 
         btnBack.setOnClickListener { finish() }
         btnFinish.setOnClickListener { finish() }
@@ -87,13 +111,13 @@ class AssessmentDetailActivity : AppCompatActivity() {
         // 2. Bind Data to the PDF View
         val tvName = pdfView.findViewById<TextView>(R.id.pdfPatientName)
         val tvId = pdfView.findViewById<TextView>(R.id.pdfPatientId)
-        val tvReportId = pdfView.findViewById<TextView>(R.id.pdfReportId) // New Field
+        val tvReportId = pdfView.findViewById<TextView>(R.id.pdfReportId)
         val tvScore = pdfView.findViewById<TextView>(R.id.pdfScore)
         val tvLevel = pdfView.findViewById<TextView>(R.id.pdfLevel)
-        val tvInterpretation = pdfView.findViewById<TextView>(R.id.pdfInterpretation) // New Field
         val tvEmotion = pdfView.findViewById<TextView>(R.id.pdfDominantEmotion)
         val tvDate = pdfView.findViewById<TextView>(R.id.pdfReportDate)
         
+        // Set data
         tvName.text = patientNameData
         tvId.text = patientIdData
         tvReportId.text = "#RPT-${System.currentTimeMillis().toString().takeLast(5)}"
@@ -102,34 +126,28 @@ class AssessmentDetailActivity : AppCompatActivity() {
         tvEmotion.text = emotionData
         tvDate.text = "Date: $dateData"
 
-        // Set Interpretation based on Level
-        val interpretation = when {
-            levelData.contains("Severe", true) || levelData.contains("High", true) -> 
-                "Patient exhibits significant signs of physiological stress and elevated anxiety markers. Clinical evaluation is strongly recommended."
-            levelData.contains("Moderate", true) -> 
-                "Patient shows indications of moderate physiological stress. Regular monitoring and follow-up assessments are advised."
-            else -> 
-                "Patient exhibits normal physiological responses. No significant anxiety markers were detected at this time."
-        }
-        tvInterpretation.text = interpretation
-
         // 3. Measure and Layout the View (A4 dimensions: 595 x 842 points)
-        val pageWidth = 595
-        val pageHeight = 842
+        val density = resources.displayMetrics.density
+        val pageWidthPoints = 595
+        val pageHeightPoints = 842
+        
+        val pageWidthPixels = (pageWidthPoints * density).toInt()
         
         pdfView.measure(
-            View.MeasureSpec.makeMeasureSpec(pageWidth, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(pageHeight, View.MeasureSpec.UNSPECIFIED) // Check generic height
+            View.MeasureSpec.makeMeasureSpec(pageWidthPixels, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED) 
         )
         
-        // Ensure it fits or just take measured height if less than page
-        val contentHeight = pdfView.measuredHeight
-        pdfView.layout(0, 0, pageWidth, contentHeight)
+        val contentHeightPixels = pdfView.measuredHeight
+        pdfView.layout(0, 0, pageWidthPixels, contentHeightPixels)
 
         // 4. Create PDF Document
         val pdfDocument = PdfDocument()
-        val pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+        val pageInfo = PdfDocument.PageInfo.Builder(pageWidthPoints, pageHeightPoints, 1).create()
         val page = pdfDocument.startPage(pageInfo)
+        
+        // Scale canvas to match density
+        page.canvas.scale(1f / density, 1f / density)
 
         // 5. Draw View to PDF Canvas (Vector)
         pdfView.draw(page.canvas)

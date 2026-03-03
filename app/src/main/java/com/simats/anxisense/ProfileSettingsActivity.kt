@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.simats.anxisense.api.DoctorApi
 import com.simats.anxisense.api.RetrofitClient
 import retrofit2.Call
@@ -23,7 +24,6 @@ class ProfileSettingsActivity : AppCompatActivity() {
 
     private lateinit var navDashboard: LinearLayout
     private lateinit var navScan: LinearLayout
-    private lateinit var navAnalysis: LinearLayout
     private lateinit var navRecords: LinearLayout
     private lateinit var navProfile: LinearLayout
 
@@ -34,8 +34,19 @@ class ProfileSettingsActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
     private lateinit var btnSaveChanges: AppCompatButton
     private lateinit var btnLogout: AppCompatButton
+    private lateinit var ivProfileImage: ImageView
 
     private var doctorId: Int = -1
+    private var selectedImageUri: android.net.Uri? = null
+
+    private val pickImage = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.GetContent()) { uri: android.net.Uri? ->
+        uri?.let {
+            selectedImageUri = it
+            ivProfileImage.setPadding(0, 0, 0, 0)
+            ivProfileImage.imageTintList = null
+            Glide.with(this).load(it).into(ivProfileImage)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +60,16 @@ class ProfileSettingsActivity : AppCompatActivity() {
         etEmail = findViewById(R.id.etEmail)
         btnSaveChanges = findViewById(R.id.btnSaveChanges)
         btnLogout = findViewById(R.id.btnLogout)
+        ivProfileImage = findViewById(R.id.ivProfileImage)
 
+        // Profile Image Click
+        ivProfileImage.setOnClickListener {
+            pickImage.launch("image/*")
+        }
+        
         // Initialize Nav Items
         navDashboard = findViewById(R.id.navDashboard)
         navScan = findViewById(R.id.navScan)
-        navAnalysis = findViewById(R.id.navAnalysis)
         navRecords = findViewById(R.id.navRecords)
         navProfile = findViewById(R.id.navProfile)
 
@@ -69,7 +85,6 @@ class ProfileSettingsActivity : AppCompatActivity() {
             loadProfileData()
         } else {
             Toast.makeText(this, "Error: Doctor ID not found", Toast.LENGTH_SHORT).show()
-            // Optionally redirect to login
         }
 
         // Save Changes Button
@@ -99,7 +114,19 @@ class ProfileSettingsActivity : AppCompatActivity() {
                             etSpecialization.setText(it.specialization ?: "")
                             etClinicName.setText(it.clinic_name ?: "")
                             etPhone.setText(it.phone ?: "")
-                            etEmail.setText(it.email) // Email usually read-only
+                            etEmail.setText(it.email)
+                            
+                            if (!it.profile_photo.isNullOrEmpty()) {
+                                ivProfileImage.setPadding(0, 0, 0, 0)
+                                ivProfileImage.imageTintList = null
+                                Glide.with(this@ProfileSettingsActivity)
+                                    .load(it.profile_photo)
+                                    .placeholder(R.drawable.ic_person)
+                                    .into(ivProfileImage)
+                            } else {
+                                ivProfileImage.setPadding(16, 16, 16, 16)
+                                ivProfileImage.setImageResource(R.drawable.ic_person)
+                            }
                         }
                     } else {
                         Toast.makeText(this@ProfileSettingsActivity, "Failed to load profile", Toast.LENGTH_SHORT).show()
@@ -144,17 +171,20 @@ class ProfileSettingsActivity : AppCompatActivity() {
                     call: Call<DoctorApi.UpdateProfileResponse>,
                     response: Response<DoctorApi.UpdateProfileResponse>
                 ) {
-                    progressDialog.dismiss()
                     if (response.isSuccessful && response.body()?.success == true) {
-                        Toast.makeText(this@ProfileSettingsActivity, "Profile Updated Successfully!", Toast.LENGTH_SHORT).show()
-
-                        // Update Shared Prefs with new name if needed
+                        // Update Shared Prefs
                         val sharedPreferences = getSharedPreferences("DoctorPrefs", Context.MODE_PRIVATE)
-                        with(sharedPreferences.edit()) {
-                            putString("DOCTOR_NAME", fullname)
-                            apply()
+                        sharedPreferences.edit().putString("DOCTOR_NAME", fullname).apply()
+
+                        // If image selected, upload it now
+                        if (selectedImageUri != null) {
+                            uploadProfileImage(progressDialog)
+                        } else {
+                            progressDialog.dismiss()
+                            Toast.makeText(this@ProfileSettingsActivity, "Profile Updated Successfully!", Toast.LENGTH_SHORT).show()
                         }
                     } else {
+                        progressDialog.dismiss()
                         Toast.makeText(this@ProfileSettingsActivity, "Update failed: ${response.message()}", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -164,6 +194,59 @@ class ProfileSettingsActivity : AppCompatActivity() {
                     Toast.makeText(this@ProfileSettingsActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    private fun uploadProfileImage(progressDialog: android.app.ProgressDialog) {
+        val uri = selectedImageUri ?: return
+        progressDialog.setMessage("Uploading Photo...")
+
+        try {
+            val contentResolver = contentResolver
+            val inputStream = contentResolver.openInputStream(uri)
+            val file = java.io.File(cacheDir, "temp_profile.jpg")
+            val outputStream = java.io.FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.close()
+
+            val requestFile = okhttp3.RequestBody.create(okhttp3.MediaType.parse("image/jpeg"), file)
+            val body = okhttp3.MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+            RetrofitClient.instance.uploadProfilePhoto(doctorId, body)
+                .enqueue(object : Callback<DoctorApi.UpdateProfileResponse> {
+                    override fun onResponse(
+                        call: Call<DoctorApi.UpdateProfileResponse>,
+                        response: Response<DoctorApi.UpdateProfileResponse>
+                    ) {
+                        progressDialog.dismiss()
+                        if (response.isSuccessful && response.body()?.success == true) {
+                            val photoUrl = response.body()?.profile_photo
+                            if (!photoUrl.isNullOrEmpty()) {
+                                ivProfileImage.setPadding(0, 0, 0, 0)
+                                ivProfileImage.imageTintList = null
+                                Glide.with(this@ProfileSettingsActivity)
+                                    .load(photoUrl)
+                                    .into(ivProfileImage)
+                            }
+                            selectedImageUri = null // Reset selection
+                            Toast.makeText(this@ProfileSettingsActivity, "Profile & Photo Updated!", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val errorBody = response.errorBody()?.string()
+                            android.util.Log.e("ProfileSettings", "Photo upload failed: ${response.code()}, Body: $errorBody")
+                            Toast.makeText(this@ProfileSettingsActivity, "Profile saved, but photo upload failed: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<DoctorApi.UpdateProfileResponse>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(this@ProfileSettingsActivity, "Network error uploading photo: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+
+        } catch (e: Exception) {
+            progressDialog.dismiss()
+            Toast.makeText(this, "Error processing image: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun performLogout() {
@@ -195,11 +278,6 @@ class ProfileSettingsActivity : AppCompatActivity() {
         }
 
         // Analysis
-        navAnalysis.setOnClickListener {
-            val intent = Intent(this, AnalysisActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         // Records
         navRecords.setOnClickListener {
@@ -215,7 +293,7 @@ class ProfileSettingsActivity : AppCompatActivity() {
     }
 
     private fun updateBottomNavStyle(selectedItem: LinearLayout) {
-        val navItems = listOf(navDashboard, navScan, navAnalysis, navRecords, navProfile)
+        val navItems = listOf(navDashboard, navScan, navRecords, navProfile)
         val selectedColor = Color.parseColor("#1A365D")
         val unselectedColor = Color.parseColor("#718096")
 

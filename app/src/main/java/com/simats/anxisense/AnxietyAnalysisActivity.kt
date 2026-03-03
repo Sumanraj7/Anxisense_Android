@@ -28,6 +28,7 @@ class AnxietyAnalysisActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var btnBack: ImageView
     private lateinit var ivAnalyzedImage: ImageView
+    private lateinit var btnRetry: androidx.appcompat.widget.AppCompatButton
 
     private var currentProgress = 0
     private val handler = Handler(Looper.getMainLooper())
@@ -44,6 +45,7 @@ class AnxietyAnalysisActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         btnBack = findViewById(R.id.btnBack)
         ivAnalyzedImage = findViewById(R.id.ivAnalyzedImage)
+        btnRetry = findViewById(R.id.btnRetry)
 
         val patientName = intent.getStringExtra("PATIENT_NAME") ?: "Unknown"
         val patientId = intent.getStringExtra("PATIENT_ID") ?: "N/A"
@@ -68,10 +70,24 @@ class AnxietyAnalysisActivity : AppCompatActivity() {
         btnBack.setOnClickListener {
             finish()
         }
+
+        btnRetry.setOnClickListener {
+            // Restart Facial Scan Activity
+            val retryIntent = Intent(this, FacialScanActivity::class.java)
+            retryIntent.putExtra("PATIENT_NAME", intent.getStringExtra("PATIENT_NAME"))
+            retryIntent.putExtra("PATIENT_ID", intent.getStringExtra("PATIENT_ID"))
+            if (intent.hasExtra("INTERNAL_PATIENT_ID")) {
+                retryIntent.putExtra("INTERNAL_PATIENT_ID", intent.getIntExtra("INTERNAL_PATIENT_ID", -1))
+            }
+            startActivity(retryIntent)
+            finish()
+        }
     }
 
     private fun performAnalysis(bitmap: Bitmap) {
         tvStatus.text = "Preparing image for analysis..."
+        progressBar.visibility = android.view.View.VISIBLE
+        btnRetry.visibility = android.view.View.GONE
         
         // Convert Bitmap to File
         val file = createImageFile(bitmap)
@@ -145,6 +161,8 @@ class AnxietyAnalysisActivity : AppCompatActivity() {
     private fun handleError(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
         tvStatus.text = "Analysis Failed"
+        progressBar.visibility = android.view.View.GONE
+        btnRetry.visibility = android.view.View.VISIBLE
         Log.e("AnxietyAnalysis", msg)
     }
 
@@ -164,6 +182,7 @@ class AnxietyAnalysisActivity : AppCompatActivity() {
         if (internalPatientId != -1) {
             intent.putExtra("INTERNAL_PATIENT_ID", internalPatientId)
         }
+        intent.putExtra("IS_QUICK_SCAN", this@AnxietyAnalysisActivity.intent.getBooleanExtra("IS_QUICK_SCAN", false))
         intent.putExtra("IMAGE_URI", imageUriString)
 
         intent.putExtra("ANXIETY_SCORE", anxietyScore)

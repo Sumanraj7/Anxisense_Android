@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7FAFC"
+    android:background="@drawable/bg_nature_gradient"
     tools:context=".AssessmentHistoryActivity">
 
     <!-- Header -->
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#FFFFFF"
+        android:background="#EBF8FF"
         android:padding="24dp"
         android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,8 +28,8 @@
                 android:id="@+id/btnBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_back_arrow"
-                app:tint="#2D3748"/>
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/blue_dark"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
                 android:text="Assessment History"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#2D3748"/>
+                android:textColor="@color/blue_dark"/>
         </LinearLayout>
 
         <TextView
@@ -48,7 +48,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="40dp"
             android:text="Patient Name • ID"
-            android:textColor="#718096"
+            android:textColor="@color/nature_text_secondary"
             android:textSize="14sp"/>
     </LinearLayout>
 
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No assessments found for this patient."
-        android:textColor="#718096"
+        android:textColor="@color/nature_text_secondary"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintBottom_toBottomOf="parent"

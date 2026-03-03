@@ -54,21 +54,23 @@ class ActivityDoctorOTP : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            // ✅ Get username from API response
+                            // ✅ Get name from API response (prefer fullname)
                             val doctor = response.body()?.doctor
+                            val fullname = doctor?.fullname
                             val username = doctor?.username ?: "Doctor"
+                            val displayName = if (!fullname.isNullOrEmpty()) fullname else username
                             val doctorId = doctor?.id ?: -1
 
                             // Save to SharedPreferences
                             val sharedPreferences = getSharedPreferences("DoctorPrefs", MODE_PRIVATE)
                             val editor = sharedPreferences.edit()
                             editor.putInt("DOCTOR_ID", doctorId)
-                            editor.putString("DOCTOR_NAME", username)
+                            editor.putString("DOCTOR_NAME", displayName)
                             editor.apply()
 
-                            // ✅ Open dashboard and pass username
+                            // ✅ Open dashboard and pass name
                             val intent = Intent(this@ActivityDoctorOTP, DoctorDashboardActivity::class.java)
-                            intent.putExtra("username", username)
+                            intent.putExtra("username", displayName)
                             startActivity(intent)
                             finish()
 

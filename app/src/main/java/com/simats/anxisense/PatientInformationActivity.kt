@@ -1,6 +1,7 @@
 package com.simats.anxisense
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
@@ -15,6 +16,8 @@ class PatientInformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_patient_information)
 
         // Initialize Views
+        val tvTitle: android.widget.TextView = findViewById(R.id.tvTitle)
+        val tvSubtitle: android.widget.TextView = findViewById(R.id.tvSubtitle)
         val etPatientId: android.widget.EditText = findViewById(R.id.etPatientId)
         val etFullName: android.widget.EditText = findViewById(R.id.etFullName)
         val etAge: android.widget.EditText = findViewById(R.id.etAge)
@@ -27,6 +30,17 @@ class PatientInformationActivity : AppCompatActivity() {
         val btnBack: ImageView = findViewById(R.id.btnBack)
         val btnCancel: AppCompatButton = findViewById(R.id.btnCancel)
         val btnProceed: AppCompatButton = findViewById(R.id.btnProceed)
+        
+        // Pre-fill from Quick Scan if available
+        val isQuickScan = intent.getBooleanExtra("IS_QUICK_SCAN", false)
+        intent.getStringExtra("PATIENT_NAME")?.let { etFullName.setText(it) }
+        intent.getStringExtra("PATIENT_ID")?.let { etPatientId.setText(it) }
+
+        if (isQuickScan) {
+            tvTitle.text = "Save Assessment"
+            tvSubtitle.text = "Complete patient registration to save results"
+            btnProceed.text = "Save to Records"
+        }
 
         // Gender Adapter
         val genderAdapter = ArrayAdapter(
@@ -82,12 +96,12 @@ class PatientInformationActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (genderSelection == 0) { // Assuming "Select" is at index 0
+            if (genderSelection == 0) { // Assuming \"Select\" is at index 0
                 Toast.makeText(this, "Please select a gender", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (procedureSelection == 0) { // Assuming "Select procedure type" is at index 0
+            if (procedureSelection == 0) { // Assuming \"Select procedure type\" is at index 0
                 Toast.makeText(this, "Please select a procedure", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -128,21 +142,28 @@ class PatientInformationActivity : AppCompatActivity() {
                         response: retrofit2.Response<com.simats.anxisense.api.DoctorApi.CreatePatientResponse>
                     ) {
                         progressDialog.dismiss()
-                        if (response.isSuccessful && response.body()?.success == true) {
-                            Toast.makeText(this@PatientInformationActivity, "Patient Added Successfully", Toast.LENGTH_SHORT).show()
-                            
-                            val intent = android.content.Intent(this@PatientInformationActivity, FacialScanActivity::class.java)
-                            intent.putExtra("PATIENT_NAME", fullName)
-                            intent.putExtra("PATIENT_ID", patientId)
-                            
-                            // Pass database ID if available
-                            response.body()?.data?.id?.let { id ->
-                                intent.putExtra("INTERNAL_PATIENT_ID", id)
+                        if (response.isSuccessful) {
+                            Log.d("PatientInfo", "Patient created successfully. ID: ${response.body()?.data?.id}")
+                            val isQuickScan = intent.getBooleanExtra("IS_QUICK_SCAN", false)
+                            val internalPatientId = response.body()?.data?.id ?: -1
+
+                            if (isQuickScan && internalPatientId != -1) {
+                                // Original Quick Scan flow: results exist, now saving to new patient
+                                savePendingAssessment(internalPatientId)
+                            } else {
+                                val nextIntent = android.content.Intent(this@PatientInformationActivity, FacialScanActivity::class.java)
+                                nextIntent.putExtra("PATIENT_NAME", fullName)
+                                nextIntent.putExtra("PATIENT_ID", patientId)
+                                if (internalPatientId != -1) {
+                                    nextIntent.putExtra("INTERNAL_PATIENT_ID", internalPatientId)
+                                }
+                                startActivity(nextIntent)
+                                finish()
                             }
-                            
-                            startActivity(intent)
                         } else {
-                            Toast.makeText(this@PatientInformationActivity, "Failed: ${response.body()?.message}", Toast.LENGTH_SHORT).show()
+                            val errorBody = response.errorBody()?.string()
+                            Log.e("PatientInfo", "Failed to create patient: $errorBody")
+                            Toast.makeText(this@PatientInformationActivity, "Failed: ${response.body()?.message ?: "Server Error"}", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -152,5 +173,61 @@ class PatientInformationActivity : AppCompatActivity() {
                     }
                 })
         }
+    }
+
+    private fun savePendingAssessment(internalPatientId: Int) {
+        val sharedPreferences = getSharedPreferences("DoctorPrefs", MODE_PRIVATE)
+        val doctorId = sharedPreferences.getInt("DOCTOR_ID", -1)
+
+        val score = intent.getFloatExtra("ANXIETY_SCORE_RAW", 0f)
+        val level = intent.getStringExtra("ANXIETY_LEVEL_RAW") ?: "Moderate"
+        val dominantEmotion = intent.getStringExtra("DOMINANT_EMOTION")
+
+        val request = com.simats.anxisense.api.DoctorApi.SaveAssessmentRequest(
+            patient_id = internalPatientId,
+            doctor_id = doctorId,
+            anxiety_score = score,
+            anxiety_level = level,
+            dominant_emotion = dominantEmotion
+        )
+
+        val progressDialog = android.app.ProgressDialog(this)
+        progressDialog.setMessage("Finalizing Assessment...")
+        progressDialog.show()
+
+        com.simats.anxisense.api.RetrofitClient.instance.saveAssessment(request)
+            .enqueue(object : retrofit2.Callback<com.simats.anxisense.api.DoctorApi.SaveAssessmentResponse> {
+                override fun onResponse(
+                    call: retrofit2.Call<com.simats.anxisense.api.DoctorApi.SaveAssessmentResponse>,
+                    response: retrofit2.Response<com.simats.anxisense.api.DoctorApi.SaveAssessmentResponse>
+                ) {
+                    progressDialog.dismiss()
+                    if (response.isSuccessful && response.body()?.success == true) {
+                        Toast.makeText(this@PatientInformationActivity, "Assessment Saved to Records!", Toast.LENGTH_SHORT).show()
+                        
+                        // Navigate directly to Detail Activity to enable PDF export as requested
+                        val detailIntent = android.content.Intent(this@PatientInformationActivity, AssessmentDetailActivity::class.java)
+                        detailIntent.putExtra("patient_name", intent.getStringExtra("PATIENT_NAME") ?: "Patient")
+                        detailIntent.putExtra("patient_code", intent.getStringExtra("PATIENT_ID") ?: "--")
+                        detailIntent.putExtra("anxiety_score", score)
+                        detailIntent.putExtra("anxiety_level", level)
+                        detailIntent.putExtra("dominant_emotion", dominantEmotion)
+                        detailIntent.putExtra("created_at", java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault()).format(java.util.Date()))
+                        
+                        detailIntent.flags = android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        startActivity(detailIntent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@PatientInformationActivity, "Failed to link assessment", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+
+                override fun onFailure(call: retrofit2.Call<com.simats.anxisense.api.DoctorApi.SaveAssessmentResponse>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Toast.makeText(this@PatientInformationActivity, "Network error saving assessment", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            })
     }
 }

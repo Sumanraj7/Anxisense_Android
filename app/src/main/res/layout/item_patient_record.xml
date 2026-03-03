@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="John Doe"
-            android:textColor="@color/forest_green"
+            android:textColor="@color/blue_dark"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--"
-            android:textColor="@color/forest_green"
+            android:textColor="@color/blue_dark"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -83,7 +83,7 @@
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:text="New"
-            android:textColor="@color/teal_accent"
+            android:textColor="@color/mint_dark"
             android:textSize="10sp"
             android:textStyle="bold"/>
 

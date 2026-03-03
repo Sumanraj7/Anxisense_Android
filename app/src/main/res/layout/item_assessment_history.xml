@@ -3,25 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="6dp"
     android:padding="16dp"
     android:background="@drawable/bg_glass_card"
     android:elevation="2dp">
 
+    <!-- Icon -->
     <ImageView
-        android:id="@+id/ivStatusIcon"
+        android:id="@+id/ivIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/bg_card_rounded"
-        android:backgroundTint="#E0F2FE"
+        android:backgroundTint="#F0FDF4"
         android:padding="8dp"
         android:src="@drawable/ic_assignment"
-        app:tint="@color/emerald_primary"
+        app:tint="@color/forest_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Name & Date -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,50 +30,63 @@
         android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tvScore"
-        app:layout_constraintStart_toEndOf="@id/ivStatusIcon"
+        app:layout_constraintEnd_toStartOf="@+id/llScore"
+        app:layout_constraintStart_toEndOf="@id/ivIcon"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tvAssessmentDate"
+            android:id="@+id/tvPatientName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="October 27, 2023"
-            android:textColor="@color/forest_green"
-            android:textSize="16sp"
+            android:text="Patient Name"
+            android:textColor="@color/blue_dark"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvAnxietyLevel"
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feb 26, 2026 • 14:30"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/nature_text_secondary"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- Score & Level -->
+    <LinearLayout
+        android:id="@+id/llScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="85%"
+            android:textColor="@color/blue_dark"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Severe Anxiety"
-            android:textColor="@color/nature_text_secondary"
-            android:textSize="12sp" />
+            android:background="@drawable/bg_card_rounded"
+            android:backgroundTint="#FEF2F2"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:text="High"
+            android:textColor="#EF4444"
+            android:textSize="9sp"
+            android:textStyle="bold"/>
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="84%"
-        android:textColor="@color/forest_green"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ivArrow"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/ivArrow"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_arrow_forward"
-        app:tint="@color/nature_border"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,14 +11,17 @@
 
     <application
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        android:theme="@style/Theme.AnxiSense"
+        android:usesCleartextTraffic="true">
 
         <!-- Splash Screen - Launcher Activity -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+            android:theme="@style/Theme.AnxiSense.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,9 +35,7 @@
             android:name=".ActivityDoctorOTP"
             android:exported="false" />
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+
         <activity
             android:name=".DoctorDashboardActivity"
             android:exported="false" /> <!-- Patient Management Activities -->
@@ -61,10 +62,8 @@
             android:exported="false" />
         <activity
             android:name=".FacialScanActivity"
-            android:exported="false" /> <!-- Analysis and Results Activities -->
-        <activity
-            android:name=".AnalysisActivity"
-            android:exported="false" />
+            android:exported="false" /> 
+        <!-- Analysis and Results Activities -->
         <activity
             android:name=".AnalysisResultsActivity"
             android:exported="false" />

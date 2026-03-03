@@ -14,7 +14,7 @@
         android:layout_height="120dp"
         app:cardCornerRadius="60dp"
         app:cardElevation="8dp"
-        app:cardBackgroundColor="#00C853"
+        app:cardBackgroundColor="#0FFCBE"
         app:layout_constraintBottom_toTopOf="@+id/tvAppName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:padding="24dp"
             android:src="@drawable/ic_leaf"
-            app:tint="#FFFFFF" />
+            app:tint="#106EBE" />
     </androidx.cardview.widget.CardView>
 
     <!-- App Name -->

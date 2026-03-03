@@ -25,7 +25,8 @@ interface DoctorApi {
     data class DoctorData(
         val id: Int,
         val username: String,
-        val email: String
+        val email: String,
+        val fullname: String?
     )
 
     data class CreatePatientRequest(
@@ -100,12 +101,23 @@ interface DoctorApi {
 
     data class GetPatientsResponse(
         val success: Boolean,
-        val message: String,
-        val data: List<PatientData>?
+        val data: List<PatientData>,
+        val pagination: PaginationData? = null
+    )
+
+    data class PaginationData(
+        val total_count: Int,
+        val total_pages: Int,
+        val current_page: Int,
+        val limit: Int
     )
 
     @GET("patients")
-    fun getPatients(@Query("doctorid") doctorId: Int): Call<GetPatientsResponse>
+    fun getPatients(
+        @Query("doctorid") doctorId: Int,
+        @Query("page") page: Int? = null,
+        @Query("limit") limit: Int? = null
+    ): Call<GetPatientsResponse>
 
     data class AssessmentData(
         val id: Int,
@@ -132,7 +144,8 @@ interface DoctorApi {
         val fullname: String?,
         val phone: String?,
         val specialization: String?,
-        val clinic_name: String?
+        val clinic_name: String?,
+        val profile_photo: String?
     )
 
     data class GetProfileResponse(
@@ -151,7 +164,8 @@ interface DoctorApi {
 
     data class UpdateProfileResponse(
         val success: Boolean,
-        val message: String?
+        val message: String,
+        val profile_photo: String? = null
     )
 
     @GET("assessments")
@@ -168,6 +182,13 @@ interface DoctorApi {
     @PUT("doctor/profile")
     fun updateDoctorProfile(
         @Body request: UpdateProfileRequest
+    ): Call<UpdateProfileResponse>
+
+    @Multipart
+    @POST("doctor/profile-photo")
+    fun uploadProfilePhoto(
+        @Part("doctorid") doctorId: Int,
+        @Part image: MultipartBody.Part
     ): Call<UpdateProfileResponse>
 
     data class DashboardStatsData(

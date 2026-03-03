@@ -16,7 +16,6 @@ class QuickScanActivity : AppCompatActivity() {
 
     private lateinit var navDashboard: LinearLayout
     private lateinit var navScan: LinearLayout
-    private lateinit var navAnalysis: LinearLayout
     private lateinit var navRecords: LinearLayout
     private lateinit var navProfile: LinearLayout
 
@@ -30,7 +29,6 @@ class QuickScanActivity : AppCompatActivity() {
         // Initialize Nav Items
         navDashboard = findViewById(R.id.navDashboard)
         navScan = findViewById(R.id.navScan)
-        navAnalysis = findViewById(R.id.navAnalysis)
         navRecords = findViewById(R.id.navRecords)
         navProfile = findViewById(R.id.navProfile)
 
@@ -38,7 +36,10 @@ class QuickScanActivity : AppCompatActivity() {
         updateBottomNavStyle(navScan)
 
         btnBeginQuickScan.setOnClickListener {
-            val intent = Intent(this, PatientInformationActivity::class.java)
+            val intent = Intent(this, FacialScanActivity::class.java)
+            intent.putExtra("IS_QUICK_SCAN", true)
+            intent.putExtra("PATIENT_NAME", "Quick Assessment")
+            intent.putExtra("PATIENT_ID", "TEMP-${System.currentTimeMillis().toString().takeLast(4)}")
             startActivity(intent)
         }
 
@@ -50,11 +51,6 @@ class QuickScanActivity : AppCompatActivity() {
             finish()
         }
         navScan.setOnClickListener { /* Already here */ }
-        navAnalysis.setOnClickListener { 
-            val intent = Intent(this, AnalysisActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
         navRecords.setOnClickListener { 
             val intent = Intent(this, PatientRecordsActivity::class.java)
             startActivity(intent)
@@ -68,7 +64,7 @@ class QuickScanActivity : AppCompatActivity() {
     }
 
     private fun updateBottomNavStyle(selectedItem: LinearLayout) {
-        val navItems = listOf(navDashboard, navScan, navAnalysis, navRecords, navProfile)
+        val navItems = listOf(navDashboard, navScan, navRecords, navProfile)
         val selectedColor = Color.parseColor("#1A365D")
         val unselectedColor = Color.parseColor("#718096")
 

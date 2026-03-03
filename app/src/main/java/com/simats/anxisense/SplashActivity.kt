@@ -9,11 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        // Removed redundant layout to achieve single-screen seamless transition
+        // The screen design is now handled directly by the Theme (windowBackground)
 
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, DoctorLoginActivity::class.java))
             finish()
-        }, 3000) // 3 second delay
+        }, 1500) // 1.5 second delay
     }
 }

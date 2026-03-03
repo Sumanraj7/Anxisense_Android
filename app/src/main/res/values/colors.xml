@@ -10,19 +10,22 @@
     <color name="white">#FFFFFFFF</color>
     
     <!-- Primary Brand Colors -->
-    <color name="blue_primary">#5B7BB2</color>
-    <color name="primary_blue">#5B7BB2</color>
-    <color name="blue_dark">#2C5282</color>
+    <color name="blue_primary">#106EBE</color>
+    <color name="primary_blue">#106EBE</color>
+    <color name="blue_dark">#0C5696</color>
+    <color name="mint_accent">#0FFCBE</color>
+    <color name="mint_dark">#0D8A6A</color> <!-- Darker version for text contrast -->
     
     <!-- Background Colors -->
-    <color name="bg_light_blue">#EBF8FF</color>
-    <color name="background_light">#F7FAFC</color>
-    <color name="info_background">#E6F7FF</color>
+    <color name="app_background">#F8FAFC</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="bg_light_blue">#F0F9FF</color>
+    <color name="background_light">#F8FAFC</color>
     
     <!-- Text Colors -->
-    <color name="text_primary">#1A365D</color>
-    <color name="text_secondary">#4A5568</color>
-    <color name="text_hint">#6B7280</color>
+    <color name="text_primary">#1E293B</color>
+    <color name="text_secondary">#2D3748</color> <!-- Updated to darker version -->
+    <color name="text_hint">#94A3B8</color>
     <color name="info_text">#1A365D</color>
     <color name="info_blue">#3182CE</color>
     
@@ -40,16 +43,17 @@
     <color name="anxiety_level_10">#DC2626</color>         <!-- Dark Red - Worst Possible -->
 
     <!-- Nature Theme Colors -->
-    <color name="nature_bg_start">#ECFDF5</color> <!-- Emerald-50 -->
+    <color name="nature_bg_start">#EBF8FF</color> <!-- Emerald-50 -->
     <color name="nature_bg_mid">#F0F9FF</color>   <!-- Sky-50 -->
-    <color name="nature_bg_end">#F0FDFA</color>   <!-- Teal-50 -->
+    <color name="nature_bg_end">#EBF8FF</color>   <!-- Teal-50 -->
 
-    <color name="forest_green">#166534</color>    <!-- Green-800 -->
-    <color name="emerald_primary">#10B981</color> <!-- Emerald-500 -->
-    <color name="teal_accent">#14B8A6</color>     <!-- Teal-500 -->
+    <color name="forest_green">#0C5696</color>    <!-- Green-800 -->
+    <color name="emerald_primary">#0FFCBE</color> <!-- Emerald-500 -->
+    <color name="teal_accent">#0FFCBE</color>     <!-- Teal-500 -->
     <color name="sky_accent">#0EA5E9</color>      <!-- Sky-500 -->
 
-    <color name="nature_border">#BBF7D0</color>   <!-- Green-200 -->
-    <color name="nature_text_primary">#166534</color>
-    <color name="nature_text_secondary">#15803D</color>
+    <color name="nature_border">#5CFDE5</color>   <!-- Green-200 -->
+    <color name="nature_text_primary">#0C487A</color> <!-- Darkened slightly -->
+    <color name="nature_text_secondary">#136230</color> <!-- Darkened for better contrast -->
+    <color name="nav_unselected">#4A5568</color> <!-- New specific color for unselected items -->
 </resources>

@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_nature_gradient"
-    tools:context=".DoctorLoginActivity">
+    android:background="@color/app_background"
+    tools:context=".DoctorLoginActivity"
+    >
 
     <!-- App Icon / Nature Branding -->
     <TextView
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:text="🌿"
         android:textSize="64sp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,12 +25,12 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="AnxietySense"
-        android:textColor="@color/forest_green"
-        android:textSize="28sp"
+        android:layout_marginTop="16dp"
+        android:text="@string/login_title"
+        android:textColor="@color/text_primary"
+        android:textSize="32sp"
         android:textStyle="bold"
-        android:letterSpacing="0.05"
+        android:letterSpacing="0.02"
         app:layout_constraintTop_toBottomOf="@id/logo_emoji"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -39,10 +40,10 @@
         android:id="@+id/subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="CLINICAL EDITION"
-        android:textColor="@color/emerald_primary"
-        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        android:text="@string/login_subtitle"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
         android:textStyle="bold"
         android:letterSpacing="0.2"
         app:layout_constraintTop_toBottomOf="@id/title"
@@ -50,56 +51,62 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Login Card -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/login_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:background="@drawable/bg_glass_card"
-        android:padding="24dp"
-        android:elevation="4dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@color/card_background"
         app:layout_constraintTop_toBottomOf="@id/subtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/lbl_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Professional Email"
-            android:textColor="@color/forest_green"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <EditText
-            android:id="@+id/email_edit_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_input_nature"
-            android:hint="doctor@hospital.org"
-            android:textColorHint="#9CA3AF"
-            android:inputType="textEmailAddress"
-            android:padding="16dp"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/lbl_email"/>
+            android:orientation="vertical"
+            android:padding="32dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/send_otp_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/bg_button_nature"
-            android:text="Secure Login"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/email_edit_text"/>
+            <TextView
+                android:id="@+id/lbl_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_professional_email"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/email_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_rounded"
+                android:backgroundTint="#F1F5F9"
+                android:hint="@string/hint_email"
+                android:textColorHint="@color/text_hint"
+                android:inputType="textEmailAddress"
+                android:paddingHorizontal="20dp"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/send_otp_button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/bg_card_rounded"
+                android:backgroundTint="@color/blue_dark"
+                android:text="@string/btn_continue_securely"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <!-- Badges Row -->
     <LinearLayout
@@ -111,8 +118,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔒 HIPAA Compliant" android:textColor="@color/forest_green" android:textSize="12sp" android:layout_marginEnd="16dp"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⚕️ Medical Grade" android:textColor="@color/forest_green" android:textSize="12sp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/badge_hipaa" android:textColor="@color/blue_dark" android:textSize="12sp" android:layout_marginEnd="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/badge_medical_grade" android:textColor="@color/blue_dark" android:textSize="12sp"/>
 
     </LinearLayout>
 

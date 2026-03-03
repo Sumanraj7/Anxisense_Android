@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_light_blue"
+    android:background="@color/app_background"
     tools:context=".PatientInformationActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -31,7 +31,7 @@
                     android:src="@drawable/ic_arrow_back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="#1A365D" />
+                    app:tint="@color/text_primary" />
 
                 <TextView
                     android:id="@+id/tvTitle"
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="Patient Information"
-                    android:textColor="#1A365D"
+                    android:textColor="@color/text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/btnBack"
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="Enter patient details for assessment"
-                    android:textColor="#596275"
+                    android:textColor="@color/text_secondary"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@id/tvTitle"
                     app:layout_constraintTop_toBottomOf="@id/tvTitle" />
@@ -68,7 +68,7 @@
                     android:id="@+id/bgIcon"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@drawable/bg_circle_light_blue"
+                    android:background="@drawable/bg_glass_card"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -82,7 +82,7 @@
                     app:layout_constraintEnd_toEndOf="@id/bgIcon"
                     app:layout_constraintStart_toStartOf="@id/bgIcon"
                     app:layout_constraintTop_toTopOf="@id/bgIcon"
-                    app:tint="#1A365D" />
+                    app:tint="@color/blue_dark" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Form Card -->
@@ -91,13 +91,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:background="@color/card_background"
                     android:padding="24dp">
 
                     <!-- Patient ID -->
@@ -105,19 +106,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Patient ID *"
-                        android:textColor="#1A365D"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etPatientId"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="56dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_input_field"
+                        android:background="@drawable/bg_card_rounded"
+                        android:backgroundTint="#F1F5F9"
                         android:hint="e.g., P001234"
-                        android:paddingHorizontal="16dp"
-                        android:textColor="#1A365D"
-                        android:textColorHint="#6B7280"
+                        android:paddingHorizontal="20dp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
                         android:textSize="14sp" />
 
                     <!-- Full Name -->
@@ -126,19 +128,20 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Full Name *"
-                        android:textColor="#1A365D"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etFullName"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="56dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_input_field"
+                        android:background="@drawable/bg_card_rounded"
+                        android:backgroundTint="#F1F5F9"
                         android:hint="Enter patient's full name"
-                        android:paddingHorizontal="16dp"
-                        android:textColor="#1A365D"
-                        android:textColorHint="#6B7280"
+                        android:paddingHorizontal="20dp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
                         android:textSize="14sp" />
 
                     <!-- Age & Gender Row -->
@@ -159,20 +162,21 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Age *"
-                                android:textColor="#1A365D"
+                                android:textColor="@color/text_primary"
                                 android:textStyle="bold" />
 
                             <EditText
                                 android:id="@+id/etAge"
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="56dp"
                                 android:layout_marginTop="8dp"
-                                android:background="@drawable/bg_input_field"
+                                android:background="@drawable/bg_card_rounded"
+                                android:backgroundTint="#F1F5F9"
                                 android:hint="Age"
                                 android:inputType="number"
-                                android:paddingHorizontal="16dp"
-                                android:textColor="#1A365D"
-                                android:textColorHint="#6B7280"
+                                android:paddingHorizontal="20dp"
+                                android:textColor="@color/text_primary"
+                                android:textColorHint="@color/text_hint"
                                 android:textSize="14sp" />
                         </LinearLayout>
 
@@ -187,16 +191,17 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Gender"
-                                android:textColor="#1A365D"
+                                android:textColor="@color/text_primary"
                                 android:textStyle="bold" />
 
                             <!-- Using Spinner for dropdown -->
                             <Spinner
                                 android:id="@+id/spinnerGender"
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="56dp"
                                 android:layout_marginTop="8dp"
-                                android:background="@drawable/bg_input_field"
+                                android:background="@drawable/bg_card_rounded"
+                                android:backgroundTint="#F1F5F9"
                                 android:paddingStart="8dp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -207,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Procedure Type"
-                        android:textColor="#1A365D"
+                        android:textColor="@color/blue_dark"
                         android:textStyle="bold" />
 
                     <Spinner
@@ -224,7 +229,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Health Issues"
-                        android:textColor="#1A365D"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold" />
 
                     <EditText
@@ -232,12 +237,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_input_field"
+                        android:background="@drawable/bg_card_rounded"
+                        android:backgroundTint="#F1F5F9"
                         android:gravity="top|start"
                         android:hint="Note any health issues, allergies, or relevant medical history"
                         android:padding="16dp"
-                        android:textColor="#1A365D"
-                        android:textColorHint="#6B7280"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
                         android:textSize="14sp" />
 
                     <!-- Previous Anxiety History -->
@@ -246,7 +252,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Previous Anxiety History"
-                        android:textColor="#1A365D"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold" />
 
                     <EditText
@@ -254,12 +260,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_input_field"
+                        android:background="@drawable/bg_card_rounded"
+                        android:backgroundTint="#F1F5F9"
                         android:gravity="top|start"
-                        android:hint="Note any previous anxiety episodes, m..."
+                        android:hint="Note any previous anxiety episodes..."
                         android:padding="16dp"
-                        android:textColor="#1A365D"
-                        android:textColorHint="#6B7280"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -271,7 +278,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/bg_note_blue"
+                android:background="@drawable/bg_card_rounded"
+                android:backgroundTint="#EFF6FF"
                 android:orientation="horizontal"
                 android:padding="16dp">
 
@@ -280,14 +288,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:text="Note:"
-                    android:textColor="#1A365D"
+                    android:textColor="#0C5696"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Patient information is encrypted and stored securely in compliance with HIPAA regulations."
-                    android:textColor="#1A365D"
+                    android:text="Patient information is encrypted and stored securely in compliance with healthcare data regulations."
+                    android:textColor="#64748B"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -302,24 +310,28 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnCancel"
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_height="56dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_button_outline"
+                    android:background="@drawable/bg_card_rounded"
+                    android:backgroundTint="#F1F5F9"
                     android:text="Cancel"
                     android:textAllCaps="false"
-                    android:textColor="#1A365D" />
+                    android:textColor="@color/text_secondary"
+                    android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnProceed"
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_height="56dp"
                     android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_button_primary"
-                    android:text="Proceed to Facial Scan"
+                    android:layout_weight="1.5"
+                    android:background="@drawable/bg_card_rounded"
+                    android:backgroundTint="@color/blue_dark"
+                    android:text="Proceed to Scan"
                     android:textAllCaps="false"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

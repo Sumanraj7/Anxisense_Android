@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_nature_gradient">
+    android:background="@color/app_background">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Profile &amp; Settings"
-                android:textColor="@color/forest_green"
+                android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -37,33 +37,40 @@
                 android:textColor="@color/nature_text_secondary"
                 android:textSize="16sp" />
 
-            <!-- Profile Form Container (Glass Card) -->
-            <LinearLayout
+            <!-- Profile Form Container (Premium Card) -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/bg_glass_card"
-                android:orientation="vertical"
-                android:padding="20dp">
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/card_background">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
 
                 <!-- Avatar -->
                 <ImageView
+                    android:id="@+id/ivProfileImage"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="24dp"
                     android:src="@drawable/ic_person"
-                    app:tint="@color/emerald_primary"
                     android:background="@drawable/bg_card_rounded"
                     android:backgroundTint="#E0F2FE"
-                    android:padding="16dp" />
+                    android:padding="16dp"
+                    android:scaleType="centerCrop" />
 
                 <!-- Full Name -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Full Name"
-                    android:textColor="@color/forest_green"
+                    android:textColor="@color/blue_dark"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -85,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Specialization"
-                    android:textColor="@color/forest_green"
+                    android:textColor="@color/blue_dark"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -107,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Clinic / Hospital Name"
-                    android:textColor="@color/forest_green"
+                    android:textColor="@color/blue_dark"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -129,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Phone Number"
-                    android:textColor="@color/forest_green"
+                    android:textColor="@color/blue_dark"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -141,6 +148,7 @@
                     android:background="@drawable/bg_input_nature"
                     android:hint="+1 234 567 8900"
                     android:inputType="phone"
+                    android:maxLength="10"
                     android:paddingHorizontal="16dp"
                     android:textColor="@color/nature_text_primary"
                     android:textSize="16sp" />
@@ -151,7 +159,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Email Address"
-                    android:textColor="@color/forest_green"
+                    android:textColor="@color/blue_dark"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -169,7 +177,8 @@
                     android:textColor="@color/nature_text_secondary"
                     android:textSize="16sp" />
 
-            </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <!-- Save Button -->
             <androidx.appcompat.widget.AppCompatButton
@@ -177,7 +186,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/bg_button_nature"
+                android:background="@drawable/bg_card_rounded"
+                android:backgroundTint="@color/blue_dark"
                 android:text="Save Changes"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
@@ -191,14 +201,15 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
-                android:background="@drawable/bg_button_outline"
-                android:text="Logout"
+                android:background="@drawable/bg_card_rounded"
+                android:backgroundTint="#FEE2E2"
+                android:text="Logout Session"
                 android:textAllCaps="false"
-                android:textColor="#F56565"
+                android:textColor="#DC2626"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:drawableStart="@drawable/ic_logout"
-                android:drawableTint="#F56565"
+                android:drawableTint="#DC2626"
                 android:drawablePadding="16dp"
                 android:paddingStart="16dp" />
 

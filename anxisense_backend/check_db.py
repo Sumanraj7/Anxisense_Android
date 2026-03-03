@@ -16,11 +16,20 @@ try:
     print("\n--- Doctors Columns ---")
     try:
         cursor.execute("DESCRIBE doctors")
-        columns = cursor.fetchall()
-        for col in columns:
-            print(f"{col[0]} - {col[1]}")
-    except Exception as e:
-        print(f"Error describing doctors: {e}")
+        for col in cursor.fetchall(): print(f"{col[0]} - {col[1]}")
+    except Exception as e: print(f"Error describing doctors: {e}")
+
+    print("\n--- Patients Columns ---")
+    try:
+        cursor.execute("DESCRIBE patients")
+        for col in cursor.fetchall(): print(f"{col[0]} - {col[1]}")
+    except Exception as e: print(f"Error describing patients: {e}")
+
+    print("\n--- Assessments Columns ---")
+    try:
+        cursor.execute("DESCRIBE assessments")
+        for col in cursor.fetchall(): print(f"{col[0]} - {col[1]}")
+    except Exception as e: print(f"Error describing assessments: {e}")
 
     cursor.close()
     db.close()

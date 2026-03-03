@@ -4,23 +4,23 @@
     android:viewportWidth="200"
     android:viewportHeight="300">
     <!-- Facial Landmark Points -->
-    <path android:fillColor="#10B981" android:pathData="M70,100h4v4h-4z"/> <!-- Left Eye -->
-    <path android:fillColor="#10B981" android:pathData="M125,100h4v4h-4z"/> <!-- Right Eye -->
-    <path android:fillColor="#10B981" android:pathData="M75,115h4v4h-4z"/> <!-- Left Eye Inner -->
-    <path android:fillColor="#10B981" android:pathData="M120,115h4v4h-4z"/> <!-- Right Eye Inner -->
-    <path android:fillColor="#10B981" android:pathData="M98,140h4v4h-4z"/> <!-- Nose Tip -->
-    <path android:fillColor="#10B981" android:pathData="M85,170h4v4h-4z"/> <!-- Mouth Left -->
-    <path android:fillColor="#10B981" android:pathData="M110,170h4v4h-4z"/> <!-- Mouth Right -->
-    <path android:fillColor="#10B981" android:pathData="M60,185h4v4h-4z"/> <!-- Chin Left -->
-    <path android:fillColor="#10B981" android:pathData="M140,185h4v4h-4z"/> <!-- Chin Right -->
+    <path android:fillColor="#0FFCBE" android:pathData="M70,100h4v4h-4z"/> <!-- Left Eye -->
+    <path android:fillColor="#0FFCBE" android:pathData="M125,100h4v4h-4z"/> <!-- Right Eye -->
+    <path android:fillColor="#0FFCBE" android:pathData="M75,115h4v4h-4z"/> <!-- Left Eye Inner -->
+    <path android:fillColor="#0FFCBE" android:pathData="M120,115h4v4h-4z"/> <!-- Right Eye Inner -->
+    <path android:fillColor="#0FFCBE" android:pathData="M98,140h4v4h-4z"/> <!-- Nose Tip -->
+    <path android:fillColor="#0FFCBE" android:pathData="M85,170h4v4h-4z"/> <!-- Mouth Left -->
+    <path android:fillColor="#0FFCBE" android:pathData="M110,170h4v4h-4z"/> <!-- Mouth Right -->
+    <path android:fillColor="#0FFCBE" android:pathData="M60,185h4v4h-4z"/> <!-- Chin Left -->
+    <path android:fillColor="#0FFCBE" android:pathData="M140,185h4v4h-4z"/> <!-- Chin Right -->
 
     <!-- Connecting Lines -->
-    <path android:strokeColor="#10B981" android:strokeWidth="1" android:pathData="M72,102L127,102"/>
-    <path android:strokeColor="#10B981" android:strokeWidth="1" android:pathData="M77,117L122,117"/>
-    <path android:strokeColor="#10B981" android:strokeWidth="1" android:pathData="M122,117L100,142"/>
-    <path android:strokeColor="#10B981" android:strokeWidth="1" android:pathData="M100,142L87,172"/>
-    <path android:strokeColor="#10B981" android:strokeWidth="1" android:pathData="M87,172L112,172"/>
-    <path android:strokeColor="#10B981" android:strokeWidth="1" android:pathData="M62,187L142,187"/>
-    <path android:strokeColor="#10B981" android:strokeWidth="1" android:pathData="M62,187L87,172"/>
-    <path android:strokeColor="#10B981" android:strokeWidth="1" android:pathData="M142,187L112,172"/>
+    <path android:strokeColor="#0FFCBE" android:strokeWidth="1" android:pathData="M72,102L127,102"/>
+    <path android:strokeColor="#0FFCBE" android:strokeWidth="1" android:pathData="M77,117L122,117"/>
+    <path android:strokeColor="#0FFCBE" android:strokeWidth="1" android:pathData="M122,117L100,142"/>
+    <path android:strokeColor="#0FFCBE" android:strokeWidth="1" android:pathData="M100,142L87,172"/>
+    <path android:strokeColor="#0FFCBE" android:strokeWidth="1" android:pathData="M87,172L112,172"/>
+    <path android:strokeColor="#0FFCBE" android:strokeWidth="1" android:pathData="M62,187L142,187"/>
+    <path android:strokeColor="#0FFCBE" android:strokeWidth="1" android:pathData="M62,187L87,172"/>
+    <path android:strokeColor="#0FFCBE" android:strokeWidth="1" android:pathData="M142,187L112,172"/>
 </vector>

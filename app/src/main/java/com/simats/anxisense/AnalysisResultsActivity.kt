@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.cardview.widget.CardView
 import com.simats.anxisense.api.DoctorApi
 import com.simats.anxisense.api.RetrofitClient
 import retrofit2.Call
@@ -27,18 +26,16 @@ class AnalysisResultsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_analysis_results)
 
         // Initialize Views
-        val btnBack: ImageView = findViewById(R.id.btnBack)
-        val tvSubtitle: TextView = findViewById(R.id.tvSubtitle)
+        val tvPatientNameLabel: TextView = findViewById(R.id.tvPatientNameLabel)
+        val tvPatientIdLabel: TextView = findViewById(R.id.tvPatientIdLabel)
         
-        val anxietyScoreCard: CardView = findViewById(R.id.anxietyScoreCard)
         val tvAnxietyScoreBig: TextView = findViewById(R.id.tvAnxietyScoreBig)
         val tvAnxietyLevelText: TextView = findViewById(R.id.tvAnxietyLevelText)
-        val pbAnxietyScore: ProgressBar = findViewById(R.id.pbAnxietyScore)
+        val pbAnxietyCircle: ProgressBar = findViewById(R.id.pbAnxietyCircle)
         
-        val tvGuideFooter: TextView = findViewById(R.id.tvGuideFooter)
-        val tvClinicalInterpretation: TextView = findViewById(R.id.tvClinicalInterpretation)
         val llKeyMetricsContainer: LinearLayout = findViewById(R.id.llKeyMetricsContainer)
         
+        val btnBack: ImageView = findViewById(R.id.btnBack)
         val btnNewScan: AppCompatButton = findViewById(R.id.btnNewScan)
         val btnViewRecommendations: AppCompatButton = findViewById(R.id.btnViewRecommendations)
 
@@ -48,11 +45,24 @@ class AnalysisResultsActivity : AppCompatActivity() {
         
         // Priority: Raw API values -> Percentage String -> Default
         val rawAnxietyScore = intent.getFloatExtra("ANXIETY_SCORE_RAW", -1f)
-        val rawAnxietyLevelStr = intent.getStringExtra("ANXIETY_LEVEL_RAW")
         val anxietyPercentageStr = intent.getStringExtra("ANXIETY_PERCENTAGE") ?: "0%"
+        val imageUriString = intent.getStringExtra("IMAGE_URI")
+
+        // Display Image if available
+        val ivAnalyzedFace = findViewById<ImageView>(R.id.ivAnalyzedFace)
+        imageUriString?.let { uriString ->
+            try {
+                val uri = android.net.Uri.parse(uriString)
+                val bitmap = android.provider.MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                ivAnalyzedFace.setImageBitmap(bitmap)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
 
         // Display Patient Info
-        tvSubtitle.text = "$patientName • $patientId"
+        tvPatientNameLabel.text = patientName
+        tvPatientIdLabel.text = "ID: $patientId"
         
         // Calculate Score (0-100)
         val finalScore = if (rawAnxietyScore != -1f) {
@@ -70,35 +80,28 @@ class AnalysisResultsActivity : AppCompatActivity() {
         // 0-39: Low (Green)
         // 40-69: Moderate (Orange)
         // 70-100: High (Red)
-        val (levelText, colorHex, interpretation) = when {
-            finalScore < 40 -> Triple(
-                "Low Anxiety", 
-                "#10B981", 
-                "Patient exhibits minimal anxiety indicators. Proceed with standard care protocol. Continue to monitor for any changes in demeanor."
-            )
-            finalScore < 70 -> Triple(
-                "Moderate Anxiety", 
-                "#F59E0B", 
-                "Patient shows elevated anxiety indicators. Consider additional reassurance and monitor closely during procedure. Verify comfort levels frequently."
-            )
-            else -> Triple(
-                "High Anxiety", 
-                "#EF4444", 
-                "Patient exhibits significant anxiety markers. Consider pausing, using calming techniques, or discussing sedation options if applicable. Prioritize patient comfort."
-            )
+        val (levelText, colorHex) = when {
+            finalScore < 40 -> Pair("Low Anxiety", "#10B981")
+            finalScore < 70 -> Pair("Moderate Anxiety", "#F59E0B")
+            else -> Pair("High Anxiety", "#EF4444")
         }
 
         // Update Score Card
         tvAnxietyScoreBig.text = finalScore.toString()
         tvAnxietyLevelText.text = levelText
-        anxietyScoreCard.setCardBackgroundColor(Color.parseColor(colorHex))
-        pbAnxietyScore.progress = finalScore
+        pbAnxietyCircle.progress = finalScore
         
-        // Update Guide Footer
-        tvGuideFooter.text = "Current Score: $finalScore - The patient falls under $levelText category"
+        // Apply color to circle
+        pbAnxietyCircle.progressTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(colorHex))
         
-        // Update Clinical Interpretation
-        tvClinicalInterpretation.text = interpretation
+        // For the badge, let's use a light version of the color as background
+        val lightColor = when {
+            finalScore < 30 -> "#ECFDF5" // Emerald 50
+            finalScore < 60 -> "#FFF7ED" // Orange 50
+            else -> "#FEF2F2" // Red 50
+        }
+        tvAnxietyLevelText.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(lightColor))
+        tvAnxietyLevelText.setTextColor(Color.parseColor(colorHex))
 
         // Dynamic Emotion Metrics
         val emotionData = intent.getStringExtra("EMOTION_DATA")
@@ -129,7 +132,7 @@ class AnalysisResultsActivity : AppCompatActivity() {
                     
                     val capitalizedEmotion = emotion.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                     tvLabel.text = capitalizedEmotion
-                    tvPercentage.text = String.format("%.1f%%", value)
+                    tvPercentage.text = String.format(Locale.getDefault(), "%.1f%%", value)
                     progressBar.progress = value.toInt()
                     
                     // Optional: Color code metrics if desired, or keep uniform
@@ -153,34 +156,276 @@ class AnalysisResultsActivity : AppCompatActivity() {
 
         // Back Button
         btnBack.setOnClickListener { finish() }
+        
+        val btnExportPdf: ImageView = findViewById(R.id.btnExportPdf)
+        btnExportPdf.setOnClickListener {
+            generatePdfReport(
+                fileNameSuffix = "$patientName - Assessment",
+                patientNameData = patientName,
+                patientIdData = patientId,
+                scoreData = "$finalScore%",
+                levelData = levelText,
+                emotionDataJson = emotionData,
+                dateData = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
+            )
+        }
 
         // New Scan Button -> QuickScanActivity
         btnNewScan.setOnClickListener {
-             // Save first? Probably safer to just go to new scan without saving current if user hits this, 
-             // BUT usually "New Scan" implies discarding or finishing. 
-             // I'll assume it discards this result and starts fresh.
              val intent = Intent(this, QuickScanActivity::class.java)
              startActivity(intent)
              finish()
         }
 
+        val isQuickScan = intent.getBooleanExtra("IS_QUICK_SCAN", false)
+        if (isQuickScan) {
+            btnViewRecommendations.text = "Save to Records"
+        }
+
+        val internalPatientId = intent.getIntExtra("INTERNAL_PATIENT_ID", -1)
+
         // View Recommendations (Acts as Save & Continue)
         btnViewRecommendations.setOnClickListener {
-            val progressDialog = android.app.ProgressDialog(this)
-            progressDialog.setMessage("Saving Assessment...")
-            progressDialog.setCancelable(false)
-            progressDialog.show()
+            if (isQuickScan && internalPatientId <= 0) {
+                // Quick Scan results first - now navigate to PatientInformationActivity to enter details
+                val intent = Intent(this, PatientInformationActivity::class.java)
+                intent.putExtra("IS_QUICK_SCAN", true)
+                intent.putExtra("PATIENT_NAME", patientName)
+                intent.putExtra("PATIENT_ID", patientId)
+                intent.putExtra("ANXIETY_SCORE_RAW", rawAnxietyScore)
+                intent.putExtra("ANXIETY_LEVEL_RAW", levelText)
+                intent.putExtra("ANXIETY_PERCENTAGE", finalScore.toString())
+                intent.putExtra("DOMINANT_EMOTION", this@AnalysisResultsActivity.intent.getStringExtra("DOMINANT_EMOTION"))
+                intent.putExtra("EMOTION_DATA", emotionData)
+                intent.putExtra("IMAGE_URI", imageUriString)
+                startActivity(intent)
+            } else {
+                // Normal flow OR Reversed Quick Scan (where patient is already created)
+                @Suppress("DEPRECATION")
+                val progressDialog = android.app.ProgressDialog(this)
+                progressDialog.setMessage("Saving Assessment...")
+                progressDialog.setCancelable(false)
+                progressDialog.show()
 
-            saveAssessmentData(
-                patientName, 
-                patientId, 
-                finalScore.toFloat(),
-                levelText, 
-                progressDialog
-            )
+                saveAssessmentData(
+                    patientName, 
+                    patientId, 
+                    finalScore.toFloat(),
+                    levelText, 
+                    progressDialog
+                )
+            }
         }
     }
 
+    private fun generatePdfReport(
+        fileNameSuffix: String,
+        patientNameData: String,
+        patientIdData: String,
+        scoreData: String,
+        levelData: String,
+        emotionDataJson: String?,
+        dateData: String
+    ) {
+        // 1. Inflate the PDF Layout
+        val pdfView = layoutInflater.inflate(R.layout.layout_pdf_report, null)
+        
+        // 2. Bind Data to the PDF View
+        val tvName = pdfView.findViewById<TextView>(R.id.pdfPatientName)
+        val tvId = pdfView.findViewById<TextView>(R.id.pdfPatientId)
+        val tvReportId = pdfView.findViewById<TextView>(R.id.pdfReportId)
+        val tvScore = pdfView.findViewById<TextView>(R.id.pdfScore)
+        val tvLevel = pdfView.findViewById<TextView>(R.id.pdfLevel)
+        val tvDominantEmotion = pdfView.findViewById<TextView>(R.id.pdfDominantEmotion)
+        val tvDate = pdfView.findViewById<TextView>(R.id.pdfReportDate)
+        val metricsContainer = pdfView.findViewById<LinearLayout>(R.id.pdfDynamicMetricsContainer)
+        
+        tvName.text = patientNameData
+        tvId.text = patientIdData
+        tvReportId.text = String.format(Locale.getDefault(), "#RPT-%s", System.currentTimeMillis().toString().takeLast(5))
+        tvScore.text = scoreData
+        tvLevel.text = levelData
+        tvDate.text = String.format(Locale.getDefault(), "Date: %s", dateData)
+
+        // Load Patient Photo
+        val pdfPhoto = pdfView.findViewById<ImageView>(R.id.pdfPatientPhoto)
+        val imageUriString = intent.getStringExtra("IMAGE_URI")
+        if (imageUriString != null) {
+            try {
+                val uri = android.net.Uri.parse(imageUriString)
+                @Suppress("DEPRECATION")
+                val bitmap = android.provider.MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                pdfPhoto.setImageBitmap(bitmap)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                pdfPhoto.setImageResource(R.mipmap.ic_launcher) // Fallback
+            }
+        } else {
+             pdfPhoto.setImageResource(R.mipmap.ic_launcher)
+        }
+
+        // Dynamic Metrics & Dominant Emotion
+        if (emotionDataJson != null) {
+             try {
+                val emotionsJson = org.json.JSONObject(emotionDataJson)
+                val emotionList = mutableListOf<Pair<String, Double>>()
+                
+                val keys = emotionsJson.keys()
+                while (keys.hasNext()) {
+                    val key = keys.next()
+                    val value = emotionsJson.getDouble(key)
+                    emotionList.add(key to value)
+                }
+                emotionList.sortByDescending { it.second }
+                
+                if (emotionList.isNotEmpty()) {
+                    val dominant = emotionList.first()
+                    val capitalizedDominant = dominant.first.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                    tvDominantEmotion.text = String.format(Locale.getDefault(), "Dominant Emotion: %s", capitalizedDominant)
+                } else {
+                     tvDominantEmotion.text = "Dominant Emotion: N/A"
+                }
+
+                // Add rows for each emotion
+                metricsContainer.removeAllViews()
+                for ((emotion, value) in emotionList) {
+                    if (value < 1.0) continue // Skip clutter
+
+                    // Create Row Layout Programmatically or Inflate simple row
+                    val row = LinearLayout(this).apply {
+                        layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                        orientation = LinearLayout.HORIZONTAL
+                        setPadding(0, 16, 0, 16)
+                    }
+
+                    // Metric Name
+                    val tvMetric = TextView(this).apply {
+                        layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                        setPadding(16, 0, 0, 0)
+                        text = emotion.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                        textSize = 13f
+                        setTextColor(Color.parseColor("#4A5568"))
+                    }
+
+                    // Value
+                    val tvValue = TextView(this).apply {
+                        layoutParams = LinearLayout.LayoutParams(100.dpToPx(), LinearLayout.LayoutParams.WRAP_CONTENT)
+                        text = String.format(Locale.getDefault(), "%.1f%%", value)
+                        textSize = 13f
+                        setTypeface(null, android.graphics.Typeface.BOLD)
+                        setTextColor(Color.parseColor("#2D3748")) // Dark Gray
+                    }
+
+                    // Status
+                    val tvStatus = TextView(this).apply {
+                         layoutParams = LinearLayout.LayoutParams(100.dpToPx(), LinearLayout.LayoutParams.WRAP_CONTENT)
+                         textSize = 13f
+                         if (value > 50) {
+                             text = "Dominant"
+                             setTextColor(Color.parseColor("#EF4444")) // Red
+                         } else if (value > 20) {
+                             text = "Present"
+                             setTextColor(Color.parseColor("#F59E0B")) // Orange
+                         } else {
+                             text = "Trace"
+                             setTextColor(Color.parseColor("#0FFCBE")) // Mint
+                         }
+                    }
+
+                    row.addView(tvMetric)
+                    row.addView(tvValue)
+                    row.addView(tvStatus)
+                    
+                    metricsContainer.addView(row)
+                    
+                    // Separator
+                    val separator = View(this).apply {
+                        layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1)
+                        setBackgroundColor(Color.parseColor("#E2E8F0"))
+                    }
+                    metricsContainer.addView(separator)
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                tvDominantEmotion.text = "Error"
+            }
+        } else {
+            tvDominantEmotion.text = "N/A"
+        }
+
+        // 3. Measure and Layout the View (A4 dimensions: 595 x 842 points)
+        val density = resources.displayMetrics.density
+        val pageWidthPoints = 595
+        val pageHeightPoints = 842
+
+        val pageWidthPixels = (pageWidthPoints * density).toInt()
+        
+        pdfView.measure(
+            View.MeasureSpec.makeMeasureSpec(pageWidthPixels, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED) 
+        )
+        
+        val contentHeightPixels = pdfView.measuredHeight
+        pdfView.layout(0, 0, pageWidthPixels, contentHeightPixels)
+
+        // 4. Create PDF Document
+        val pdfDocument = android.graphics.pdf.PdfDocument()
+        val pageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(pageWidthPoints, pageHeightPoints, 1).create()
+        val page = pdfDocument.startPage(pageInfo)
+
+        // Scale canvas
+        page.canvas.scale(1f / density, 1f / density)
+
+        // 5. Draw View to PDF Canvas
+        pdfView.draw(page.canvas)
+        
+        pdfDocument.finishPage(page)
+
+        // 6. Save PDF
+        val cleanFileName = "Report_${fileNameSuffix.replace(Regex("[^a-zA-Z0-9]"), "_")}.pdf"
+        
+        try {
+            savePdfToStorage(pdfDocument, cleanFileName)
+            Toast.makeText(this, "PDF Report Saved: $cleanFileName", Toast.LENGTH_LONG).show()
+        } catch (e: java.io.IOException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Failed to save PDF: ${e.message}", Toast.LENGTH_SHORT).show()
+        } finally {
+            pdfDocument.close()
+        }
+    }
+
+    private fun savePdfToStorage(pdfDocument: android.graphics.pdf.PdfDocument, fileName: String) {
+        val outputStream: java.io.OutputStream?
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            val contentValues = android.content.ContentValues().apply {
+                put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                put(android.provider.MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+                put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS)
+            }
+            val uri = contentResolver.insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+            outputStream = uri?.let { contentResolver.openOutputStream(it) }
+        } else {
+            val directory = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
+            if (!directory.exists()) directory.mkdirs()
+            val file = java.io.File(directory, fileName)
+            outputStream = java.io.FileOutputStream(file)
+        }
+
+        outputStream?.use {
+            pdfDocument.writeTo(it)
+        } ?: throw java.io.IOException("Failed to create output stream")
+    }
+    
+    // Helper extension
+    private fun Int.dpToPx(): Int {
+        val density = resources.displayMetrics.density
+        return (this * density).toInt()
+    }
+
+    @Suppress("DEPRECATION")
     private fun saveAssessmentData(
         patientName: String,
         patientId: String,
@@ -223,10 +468,18 @@ class AnalysisResultsActivity : AppCompatActivity() {
                     progressDialog.dismiss()
                     if (response.isSuccessful && response.body()?.success == true) {
                         Toast.makeText(this@AnalysisResultsActivity, "Assessment saved!", Toast.LENGTH_SHORT).show()
-                        // Proceed to Records or Dashboard
-                        val intent = Intent(this@AnalysisResultsActivity, PatientRecordsActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
+                        
+                        // Proceed directly to the report detail screen
+                        val detIntent = Intent(this@AnalysisResultsActivity, AssessmentDetailActivity::class.java)
+                        detIntent.putExtra("patient_name", patientName)
+                        detIntent.putExtra("patient_code", patientId)
+                        detIntent.putExtra("anxiety_score", anxietyScore)
+                        detIntent.putExtra("anxiety_level", anxietyLevel)
+                        detIntent.putExtra("dominant_emotion", dominantEmotion)
+                        detIntent.putExtra("created_at", java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date()))
+                        
+                        detIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        startActivity(detIntent)
                         finish()
                     } else {
                         val errorMsg = response.errorBody()?.string() ?: response.message()

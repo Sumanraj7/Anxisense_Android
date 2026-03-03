@@ -1,5 +1,6 @@
 package com.simats.anxisense
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,10 @@ class AssessmentAdapter(
 ) : RecyclerView.Adapter<AssessmentAdapter.AssessmentViewHolder>() {
 
     class AssessmentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvAssessmentDate: TextView = itemView.findViewById(R.id.tvAssessmentDate)
+        val tvName: TextView = itemView.findViewById(R.id.tvPatientName)
+        val tvDate: TextView = itemView.findViewById(R.id.tvDate)
         val tvScore: TextView = itemView.findViewById(R.id.tvScore)
-        val tvLevel: TextView = itemView.findViewById(R.id.tvAnxietyLevel)
+        val tvLevel: TextView = itemView.findViewById(R.id.tvLevel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssessmentViewHolder {
@@ -26,18 +28,26 @@ class AssessmentAdapter(
 
     override fun onBindViewHolder(holder: AssessmentViewHolder, position: Int) {
         val assessment = assessments[position]
-        
-        holder.tvAssessmentDate.text = assessment.created_at ?: "Unknown Date"
-        
+
+        holder.tvName.text = assessment.patient_name ?: "Unknown Patient"
+        holder.tvDate.text = assessment.created_at ?: "N/A"
         holder.tvScore.text = "${assessment.anxiety_score.toInt()}%"
-        holder.tvLevel.text = assessment.anxiety_level
+        
+        val level = assessment.anxiety_level
+        holder.tvLevel.text = level
 
-        // Color coding based on level
-        val context = holder.itemView.context
-        val levelData = AnxietyLevelUtils.getAnxietyLevelFromPercentage(assessment.anxiety_score.toInt())
-        holder.tvLevel.setTextColor(levelData.color)
-        holder.tvScore.setTextColor(levelData.color)
-
+        // Color coding for levels
+        val (color, bgColor) = when {
+            level.contains("High", ignoreCase = true) || level.contains("Severe", ignoreCase = true) -> 
+                Pair("#EF4444", "#FEF2F2") // Red
+            level.contains("Moderate", ignoreCase = true) -> 
+                Pair("#F59E0B", "#FFFBEB") // Orange
+            else -> 
+                Pair("#10B981", "#F0FDF4") // Green
+        }
+        
+        holder.tvLevel.setTextColor(Color.parseColor(color))
+        holder.tvLevel.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(bgColor))
 
         holder.itemView.setOnClickListener {
             onItemClick(assessment)

@@ -15,27 +15,19 @@ class DoctorDashboardActivity : AppCompatActivity() {
 
     private lateinit var navDashboard: LinearLayout
     private lateinit var navScan: LinearLayout
-    private lateinit var navAnalysis: LinearLayout
     private lateinit var navRecords: LinearLayout
     private lateinit var navProfile: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_dashboard)
-        val tvWelcome = findViewById<TextView>(R.id.tvWelcome)
-        val username = intent.getStringExtra("username") ?: "Doctor"
-        tvWelcome.text = "Welcome, $username"
-
-
-
-
+        
         // Bind Views
         val btnBeginAssessment = findViewById<View>(R.id.btnBeginAssessment)
 
         // Initialize Nav Items from the included layout
         navDashboard = findViewById(R.id.navDashboard)
         navScan = findViewById(R.id.navScan)
-        navAnalysis = findViewById(R.id.navAnalysis)
         navRecords = findViewById(R.id.navRecords)
         navProfile = findViewById(R.id.navProfile)
 
@@ -52,10 +44,6 @@ class DoctorDashboardActivity : AppCompatActivity() {
             val intent = android.content.Intent(this, QuickScanActivity::class.java)
             startActivity(intent)
         }
-        navAnalysis.setOnClickListener { 
-            val intent = android.content.Intent(this, AnalysisActivity::class.java)
-            startActivity(intent)
-        }
         navRecords.setOnClickListener { 
             val intent = android.content.Intent(this, PatientRecordsActivity::class.java)
             startActivity(intent)
@@ -68,7 +56,30 @@ class DoctorDashboardActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        
+        val tvWelcome = findViewById<TextView>(R.id.tvWelcome)
+        val sharedPrefs = getSharedPreferences("DoctorPrefs", MODE_PRIVATE)
+        val savedName = sharedPrefs.getString("DOCTOR_NAME", null)
+        val username = savedName ?: intent.getStringExtra("username") ?: "Doctor"
+        tvWelcome.text = "Welcome, $username"
+
         fetchDashboardStats()
+        
+        // Connect Stats to Recent Analysis
+        val tvStatToday = findViewById<TextView>(R.id.tvStatToday)
+        val tvStatTotal = findViewById<TextView>(R.id.tvStatTotal)
+        
+        val goToRecords = {
+            val intent = android.content.Intent(this, PatientRecordsActivity::class.java)
+            startActivity(intent)
+        }
+        
+        // Use parent of textview as the card content
+        (tvStatToday.parent as? View)?.setOnClickListener { goToRecords() }
+        (tvStatTotal.parent as? View)?.setOnClickListener { goToRecords() }
+        
+        // Update Bottom Nav Style to ensure Dashboard is selected
+        updateBottomNavState(navDashboard, "Dashboard")
     }
 
     private fun fetchDashboardStats() {
@@ -104,7 +115,7 @@ class DoctorDashboardActivity : AppCompatActivity() {
 
     private fun updateBottomNavState(selectedItem: LinearLayout, itemName: String) {
         // List of all nav items
-        val navItems = listOf(navDashboard, navScan, navAnalysis, navRecords, navProfile)
+        val navItems = listOf(navDashboard, navScan, navRecords, navProfile)
 
         // Colors
         val selectedColor = Color.parseColor("#1A365D")
@@ -129,7 +140,5 @@ class DoctorDashboardActivity : AppCompatActivity() {
                 textView.setTypeface(null, Typeface.NORMAL)
             }
         }
-
-        Toast.makeText(this, "Navigated to $itemName", Toast.LENGTH_SHORT).show()
     }
 }
