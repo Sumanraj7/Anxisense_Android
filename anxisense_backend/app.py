@@ -76,7 +76,7 @@ if os.environ.get("WERKZEUG_RUN_MAIN") == "true": # Only run once in debug mode
 elif not app.debug:
     init_db()
 
-
+#added new text
 # --------------------
 # HOME ROUTE
 # --------------------
