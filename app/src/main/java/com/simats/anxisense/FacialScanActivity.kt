@@ -200,10 +200,10 @@ class FacialScanActivity : AppCompatActivity() {
                         runOnUiThread {
                             if (faceDetected && !isScanning) {
                                 tvGuideText.text = "Face Detected • Ready to Scan"
-                                tvGuideText.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_light))
+                                tvGuideText.setTextColor(ContextCompat.getColor(this, R.color.editorial_text_primary))
                             } else if (!isScanning) {
                                 tvGuideText.text = "Position face within guide"
-                                tvGuideText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+                                tvGuideText.setTextColor(ContextCompat.getColor(this, R.color.editorial_text_secondary))
                             }
                         }
                     })
@@ -259,7 +259,7 @@ class FacialScanActivity : AppCompatActivity() {
             // Update guide text
             tvGuideText.visibility = View.VISIBLE
             tvGuideText.text = "Image uploaded successfully"
-            tvGuideText.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_light))
+            tvGuideText.setTextColor(ContextCompat.getColor(this, R.color.editorial_text_primary))
             
             // Show and enable analyze button
             btnStartScan.visibility = View.VISIBLE
@@ -617,7 +617,7 @@ class FacialScanActivity : AppCompatActivity() {
         layoutActionButtons.visibility = View.GONE
         tvGuideText.visibility = View.VISIBLE
         tvGuideText.text = "Position face within guide"
-        tvGuideText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+        tvGuideText.setTextColor(ContextCompat.getColor(this, R.color.editorial_text_secondary))
         currentProgress = 0
         progressBar.progress = 0
         

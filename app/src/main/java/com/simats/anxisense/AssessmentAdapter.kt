@@ -36,18 +36,21 @@ class AssessmentAdapter(
         val level = assessment.anxiety_level
         holder.tvLevel.text = level
 
-        // Color coding for levels
-        val (color, bgColor) = when {
+        // Color coding for levels using editorial palette
+        val (colorRes, bgColorRes) = when {
             level.contains("High", ignoreCase = true) || level.contains("Severe", ignoreCase = true) -> 
-                Pair("#EF4444", "#FEF2F2") // Red
+                Pair(R.color.anxiety_high, R.color.anxiety_high_bg)
             level.contains("Moderate", ignoreCase = true) -> 
-                Pair("#F59E0B", "#FFFBEB") // Orange
+                Pair(R.color.anxiety_moderate, R.color.anxiety_moderate_bg)
             else -> 
-                Pair("#10B981", "#F0FDF4") // Green
+                Pair(R.color.anxiety_low, R.color.anxiety_low_bg)
         }
         
-        holder.tvLevel.setTextColor(Color.parseColor(color))
-        holder.tvLevel.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(bgColor))
+        val context = holder.itemView.context
+        holder.tvLevel.setTextColor(androidx.core.content.ContextCompat.getColor(context, colorRes))
+        holder.tvLevel.backgroundTintList = android.content.res.ColorStateList.valueOf(
+            androidx.core.content.ContextCompat.getColor(context, bgColorRes)
+        )
 
         holder.itemView.setOnClickListener {
             onItemClick(assessment)

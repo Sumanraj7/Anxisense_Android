@@ -149,7 +149,7 @@ class PatientInformationActivity : AppCompatActivity() {
 
                             if (isQuickScan && internalPatientId != -1) {
                                 // Original Quick Scan flow: results exist, now saving to new patient
-                                savePendingAssessment(internalPatientId)
+                                savePendingAssessment(internalPatientId, fullName, patientId)
                             } else {
                                 val nextIntent = android.content.Intent(this@PatientInformationActivity, FacialScanActivity::class.java)
                                 nextIntent.putExtra("PATIENT_NAME", fullName)
@@ -175,7 +175,7 @@ class PatientInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun savePendingAssessment(internalPatientId: Int) {
+    private fun savePendingAssessment(internalPatientId: Int, fullNameText: String, patientIdText: String) {
         val sharedPreferences = getSharedPreferences("DoctorPrefs", MODE_PRIVATE)
         val doctorId = sharedPreferences.getInt("DOCTOR_ID", -1)
 
@@ -207,8 +207,8 @@ class PatientInformationActivity : AppCompatActivity() {
                         
                         // Navigate directly to Detail Activity to enable PDF export as requested
                         val detailIntent = android.content.Intent(this@PatientInformationActivity, AssessmentDetailActivity::class.java)
-                        detailIntent.putExtra("patient_name", intent.getStringExtra("PATIENT_NAME") ?: "Patient")
-                        detailIntent.putExtra("patient_code", intent.getStringExtra("PATIENT_ID") ?: "--")
+                        detailIntent.putExtra("patient_name", fullNameText)
+                        detailIntent.putExtra("patient_code", patientIdText)
                         detailIntent.putExtra("anxiety_score", score)
                         detailIntent.putExtra("anxiety_level", level)
                         detailIntent.putExtra("dominant_emotion", dominantEmotion)

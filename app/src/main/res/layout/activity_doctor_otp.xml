@@ -4,20 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@color/editorial_bg"
+    android:padding="24dp"
     tools:context=".ActivityDoctorOTP">
 
+    <!-- Abstract Background Shape -->
+    <ImageView
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="-150dp"
+        android:layout_marginEnd="-150dp"
+        android:src="@drawable/bg_editorial_shape_abstract"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Back Arrow / Minimal Branding -->
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginTop="60dp"
-        android:src="@drawable/ic_shield"
-        app:tint="@color/mint_accent"
-        android:background="@drawable/bg_card_rounded"
-        android:backgroundTint="#E0F2FE"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_arrow_back"
+        app:tint="@color/editorial_text_primary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,12 +33,11 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/otp_title"
-        android:textColor="@color/blue_dark"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/playfair_display_bold"
+        android:textColor="@color/editorial_text_primary"
+        android:textSize="32sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/icon" />
 
@@ -38,36 +45,41 @@
         android:id="@+id/subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:text="@string/otp_subtitle"
-        android:textColor="@color/nature_text_secondary"
+        android:fontFamily="@font/inter_family"
+        android:textColor="@color/editorial_text_secondary"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/login_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/bg_glass_card"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@color/editorial_card_bg"
+        app:layout_constraintTop_toBottomOf="@id/subtitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/subtitle">
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <!-- EMAIL LABEL -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/lbl_email_address"
-                android:textColor="@color/blue_dark"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <!-- EMAIL DISPLAY -->
             <TextView
@@ -75,52 +87,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/bg_input_nature"
-                android:drawableStart="@drawable/ic_email"
-                android:drawablePadding="12dp"
-                android:padding="12dp"
+                android:background="@drawable/bg_editorial_card"
+                android:backgroundTint="@color/editorial_divider"
+                android:padding="16dp"
                 android:text="doctor@email.com"
-                android:textColor="@color/nature_text_primary"
-                android:drawableTint="@color/mint_accent"/>
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_secondary" />
 
             <!-- OTP LABEL -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/lbl_enter_otp"
-                android:textColor="@color/blue_dark"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <!-- OTP INPUT -->
             <EditText
                 android:id="@+id/otp_edit_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_input_nature"
-                android:drawableStart="@drawable/ic_key"
-                android:drawablePadding="12dp"
-                android:drawableTint="@color/mint_accent"
+                android:layout_height="56dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_editorial_card"
+                android:backgroundTint="@color/editorial_bg"
                 android:hint="@string/hint_otp"
+                android:textColorHint="@color/editorial_text_secondary"
                 android:inputType="numberPassword"
                 android:maxLength="6"
-                android:padding="12dp"
-                android:textColor="@color/nature_text_primary" />
+                android:paddingHorizontal="16dp"
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="18sp"
+                android:letterSpacing="0.3"
+                android:gravity="center" />
 
             <!-- VERIFY BUTTON -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/verify_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/bg_button_nature"
-                android:padding="12dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/bg_editorial_button_primary"
                 android:text="@string/btn_verify_login"
                 android:textAllCaps="false"
+                android:fontFamily="@font/inter_family"
                 android:textSize="16sp"
-                android:textStyle="bold"
                 android:textColor="@android:color/white" />
 
             <TextView
@@ -128,54 +142,51 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/btn_resend_otp"
-                android:textColor="@color/mint_accent"
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"/>
 
-    </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
         android:id="@+id/privacy_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_card_rounded"
-        android:backgroundTint="#E0F2FE"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_editorial_card"
+        android:backgroundTint="@color/editorial_card_bg"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_card">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_shield"
-                app:tint="@color/mint_accent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="vertical">
+                android:text="@string/privacy_security_title"
+                android:fontFamily="@font/playfair_display_bold"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="18sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/privacy_security_title"
-                    android:textColor="@color/blue_dark"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/privacy_security_desc"
-                    android:textColor="@color/nature_text_secondary"
-                    android:textSize="12sp"/>
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/privacy_security_desc"
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_secondary"
+                android:textSize="13sp"/>
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

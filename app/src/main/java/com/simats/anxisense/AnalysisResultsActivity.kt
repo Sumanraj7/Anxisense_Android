@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import com.simats.anxisense.api.DoctorApi
 import com.simats.anxisense.api.RetrofitClient
 import retrofit2.Call
@@ -35,7 +36,7 @@ class AnalysisResultsActivity : AppCompatActivity() {
         
         val llKeyMetricsContainer: LinearLayout = findViewById(R.id.llKeyMetricsContainer)
         
-        val btnBack: ImageView = findViewById(R.id.btnBack)
+        val btnBack: View = findViewById(R.id.btnBack)
         val btnNewScan: AppCompatButton = findViewById(R.id.btnNewScan)
         val btnViewRecommendations: AppCompatButton = findViewById(R.id.btnViewRecommendations)
 
@@ -80,10 +81,18 @@ class AnalysisResultsActivity : AppCompatActivity() {
         // 0-39: Low (Green)
         // 40-69: Moderate (Orange)
         // 70-100: High (Red)
-        val (levelText, colorHex) = when {
-            finalScore < 40 -> Pair("Low Anxiety", "#10B981")
-            finalScore < 70 -> Pair("Moderate Anxiety", "#F59E0B")
-            else -> Pair("High Anxiety", "#EF4444")
+        // --- Apply Logic for New UI Guide ---
+        // 0-39: Low, 40-69: Moderate, 70-100: High
+        val (levelText, colorRes) = when {
+            finalScore < 40 -> Pair("Low Anxiety", R.color.anxiety_low)
+            finalScore < 70 -> Pair("Moderate Anxiety", R.color.anxiety_moderate)
+            else -> Pair("High Anxiety", R.color.anxiety_high)
+        }
+
+        val badgeBgRes = when {
+            finalScore < 40 -> R.color.anxiety_low_bg
+            finalScore < 70 -> R.color.anxiety_moderate_bg
+            else -> R.color.anxiety_high_bg
         }
 
         // Update Score Card
@@ -92,16 +101,11 @@ class AnalysisResultsActivity : AppCompatActivity() {
         pbAnxietyCircle.progress = finalScore
         
         // Apply color to circle
-        pbAnxietyCircle.progressTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(colorHex))
+        pbAnxietyCircle.progressTintList = android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, colorRes))
         
-        // For the badge, let's use a light version of the color as background
-        val lightColor = when {
-            finalScore < 30 -> "#ECFDF5" // Emerald 50
-            finalScore < 60 -> "#FFF7ED" // Orange 50
-            else -> "#FEF2F2" // Red 50
-        }
-        tvAnxietyLevelText.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(lightColor))
-        tvAnxietyLevelText.setTextColor(Color.parseColor(colorHex))
+        // Apply badge styling
+        tvAnxietyLevelText.backgroundTintList = android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, badgeBgRes))
+        tvAnxietyLevelText.setTextColor(ContextCompat.getColor(this, colorRes))
 
         // Dynamic Emotion Metrics
         val emotionData = intent.getStringExtra("EMOTION_DATA")
@@ -136,16 +140,17 @@ class AnalysisResultsActivity : AppCompatActivity() {
                     progressBar.progress = value.toInt()
                     
                     // Optional: Color code metrics if desired, or keep uniform
-                     val metricColor = when(emotion.lowercase()) {
-                        "angry" -> "#EF4444"
-                        "happy" -> "#10B981"
-                        "sad" -> "#3B82F6"
-                        "fear" -> "#8B5CF6"
-                        "surprise" -> "#F59E0B"
-                        "disgust" -> "#14B8A6"
-                        else -> "#6B7280"
+                    // Color code metrics if desired using editorial palette
+                     val metricColorRes = when(emotion.lowercase()) {
+                        "angry" -> R.color.emotion_angry
+                        "happy" -> R.color.emotion_happy
+                        "sad" -> R.color.emotion_sad
+                        "fear" -> R.color.emotion_fear
+                        "surprise" -> R.color.emotion_surprise
+                        "disgust" -> R.color.emotion_disgust
+                        else -> R.color.emotion_neutral
                     }
-                    progressBar.progressTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(metricColor))
+                    progressBar.progressTintList = android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, metricColorRes))
                     
                     llKeyMetricsContainer.addView(view)
                 }
@@ -304,7 +309,7 @@ class AnalysisResultsActivity : AppCompatActivity() {
                         setPadding(16, 0, 0, 0)
                         text = emotion.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                         textSize = 13f
-                        setTextColor(Color.parseColor("#4A5568"))
+                        setTextColor(ContextCompat.getColor(this@AnalysisResultsActivity, R.color.editorial_text_secondary))
                     }
 
                     // Value
@@ -313,7 +318,7 @@ class AnalysisResultsActivity : AppCompatActivity() {
                         text = String.format(Locale.getDefault(), "%.1f%%", value)
                         textSize = 13f
                         setTypeface(null, android.graphics.Typeface.BOLD)
-                        setTextColor(Color.parseColor("#2D3748")) // Dark Gray
+                        setTextColor(ContextCompat.getColor(this@AnalysisResultsActivity, R.color.editorial_text_primary))
                     }
 
                     // Status
@@ -322,13 +327,13 @@ class AnalysisResultsActivity : AppCompatActivity() {
                          textSize = 13f
                          if (value > 50) {
                              text = "Dominant"
-                             setTextColor(Color.parseColor("#EF4444")) // Red
+                             setTextColor(ContextCompat.getColor(this@AnalysisResultsActivity, R.color.anxiety_high))
                          } else if (value > 20) {
                              text = "Present"
-                             setTextColor(Color.parseColor("#F59E0B")) // Orange
+                             setTextColor(ContextCompat.getColor(this@AnalysisResultsActivity, R.color.anxiety_moderate))
                          } else {
                              text = "Trace"
-                             setTextColor(Color.parseColor("#0FFCBE")) // Mint
+                             setTextColor(ContextCompat.getColor(this@AnalysisResultsActivity, R.color.anxiety_low))
                          }
                     }
 
@@ -341,7 +346,7 @@ class AnalysisResultsActivity : AppCompatActivity() {
                     // Separator
                     val separator = View(this).apply {
                         layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1)
-                        setBackgroundColor(Color.parseColor("#E2E8F0"))
+                        setBackgroundColor(ContextCompat.getColor(this@AnalysisResultsActivity, R.color.editorial_divider))
                     }
                     metricsContainer.addView(separator)
                 }

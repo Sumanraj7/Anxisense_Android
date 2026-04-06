@@ -37,7 +37,7 @@ class AssessmentDetailActivity : AppCompatActivity() {
         val tvInterpretationSummary = findViewById<TextView>(R.id.tvInterpretationSummary)
         val tvAnalysisDate = findViewById<TextView>(R.id.tvAnalysisDate)
         
-        val btnBack = findViewById<ImageView>(R.id.btnBack)
+        val btnBack = findViewById<View>(R.id.btnBack)
         val btnFinish = findViewById<AppCompatButton>(R.id.btnFinish)
         val btnExport = findViewById<AppCompatButton>(R.id.btnExport)
 
@@ -64,21 +64,21 @@ class AssessmentDetailActivity : AppCompatActivity() {
         tvStatusBadge.text = anxietyLevel
         pbAnxietyCircleDetail.progress = percentage
 
-        // Color Logic
-        val colorHex = when {
-            percentage < 30 -> "#059669" // Green
-            percentage < 60 -> "#EA580C" // Orange
-            else -> "#DC2626" // Red
+        // Color Logic from Editorial Palette
+        val colorRes = when {
+            percentage < 30 -> R.color.anxiety_low
+            percentage < 60 -> R.color.anxiety_moderate
+            else -> R.color.anxiety_high
         }
-        val lightColor = when {
-            percentage < 30 -> "#ECFDF5"
-            percentage < 60 -> "#FFF7ED"
-            else -> "#FEF2F2"
+        val badgeBgRes = when {
+            percentage < 30 -> R.color.anxiety_low_bg
+            percentage < 60 -> R.color.anxiety_moderate_bg
+            else -> R.color.anxiety_high_bg
         }
 
-        pbAnxietyCircleDetail.progressTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(colorHex))
-        tvStatusBadge.backgroundTintList = android.content.res.ColorStateList.valueOf(Color.parseColor(lightColor))
-        tvStatusBadge.setTextColor(Color.parseColor(colorHex))
+        pbAnxietyCircleDetail.progressTintList = android.content.res.ColorStateList.valueOf(androidx.core.content.ContextCompat.getColor(this, colorRes))
+        tvStatusBadge.backgroundTintList = android.content.res.ColorStateList.valueOf(androidx.core.content.ContextCompat.getColor(this, badgeBgRes))
+        tvStatusBadge.setTextColor(androidx.core.content.ContextCompat.getColor(this, colorRes))
         
         tvInterpretationSummary.text = when {
             percentage < 30 -> "The AI detected low physiological stress markers. The patient appears relatively stable."

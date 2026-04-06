@@ -19,13 +19,10 @@ data class AnxietyLevel(
  */
 object AnxietyLevelUtils {
     
-    // Color definitions for each range
-    private val COLOR_NO_ANXIETY = Color.parseColor("#0FFCBE")      // Mint
-    private val COLOR_MILD = Color.parseColor("#0FFCBE")            // Mint
-    private val COLOR_MODERATE = Color.parseColor("#FBBF24")        // Yellow/Orange
-    private val COLOR_SEVERE = Color.parseColor("#F97316")          // Orange
-    private val COLOR_VERY_SEVERE = Color.parseColor("#EF4444")     // Red
-    private val COLOR_WORST = Color.parseColor("#DC2626")           // Dark red
+    // Color definitions for each range (Aligned with colors.xml)
+    private val COLOR_LOW = Color.parseColor("#10B981")          // Emerald-500
+    private val COLOR_MODERATE = Color.parseColor("#F59E0B")     // Amber-500
+    private val COLOR_HIGH = Color.parseColor("#EF4444")         // Red-500
     
     /**
      * Convert percentage (0-100) to anxiety level (0-10)
@@ -58,7 +55,7 @@ object AnxietyLevelUtils {
                 level = clampedLevel,
                 severityName = "Low Anxiety",
                 severityCategory = "Low",
-                color = COLOR_MILD,
+                color = COLOR_LOW,
                 description = "Patient shows low signs of anxiety",
                 emojiResId = if(clampedLevel == 0) R.drawable.ic_anxiety_face_0 else R.drawable.ic_anxiety_face_1
             )
@@ -74,7 +71,7 @@ object AnxietyLevelUtils {
                 level = clampedLevel,
                 severityName = "High Anxiety",
                 severityCategory = "High",
-                color = COLOR_SEVERE,
+                color = COLOR_HIGH,
                 description = "Patient shows high anxiety requiring intervention",
                 emojiResId = R.drawable.ic_anxiety_face_10
             )

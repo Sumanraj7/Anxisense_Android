@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Background Gradient -->
+    <!-- Background Color -->
     <item>
         <shape android:shape="rectangle">
-            <gradient
-                android:angle="135"
-                android:startColor="#106EBE"
-                android:centerColor="#0CA9BE"
-                android:endColor="#0FFCBE"
-                android:type="linear" />
+            <solid android:color="@color/editorial_bg" />
         </shape>
     </item>
 
-    <!-- Optional: Centered Logo -->
+    <!-- Centered Logo -->
     <item
         android:drawable="@drawable/ic_leaf"
         android:gravity="center"
-        android:width="120dp"
-        android:height="120dp" />
+        android:width="100dp"
+        android:height="100dp">
+        <bitmap
+            android:src="@drawable/ic_leaf"
+            android:tint="@color/editorial_text_primary" />
+    </item>
 </layer-list>

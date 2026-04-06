@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnxiSense Clinical - Dashboard</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .active-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+
+    <!-- Tailwind CSS with configuration -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#106EBE',
+                        mint: '#0FFCBE',
+                        'background-light': '#f8fafc',
+                        'background-dark': '#0f172a'
+                    },
+                    fontFamily: {
+                        display: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen transition-colors duration-300">
+
+    <!-- Top Navigation -->
+    <header
+        class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-[#106EBE] to-[#0FFCBE] rounded-xl flex items-center justify-center shadow-md">
+                        <span class="material-symbols-outlined text-white active-icon">psychiatry</span>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight">AnxiSense</h1>
+                        <p
+                            class="text-[10px] font-medium text-primary dark:text-mint uppercase tracking-wider leading-none">
+                            Clinical Edition</p>
+                    </div>
+                </div>
+
+                <!-- Right Nav -->
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleTheme()"
+                        class="p-2 rounded-full hover:bg-primary/5 dark:hover:bg-slate-800 transition-colors">
+                        <span id="theme-icon"
+                            class="material-symbols-outlined text-primary dark:text-mint">dark_mode</span>
+                    </button>
+
+                    <div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p id="profile-name" class="text-sm font-semibold leading-none">Loading...</p>
+                            <p id="profile-role" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Provider</p>
+                        </div>
+                        <div class="h-10 w-10 rounded-full bg-primary/10 dark:bg-slate-800 flex items-center justify-center border border-primary/20 cursor-pointer overflow-hidden"
+                            onclick="logout()">
+                            <img id="profile-img" src="" class="w-full h-full object-cover hidden" alt="Profile">
+                            <span id="profile-placeholder"
+                                class="material-symbols-outlined text-primary dark:text-slate-300">person</span>
+                        </div>
+                        <button onclick="logout()"
+                            class="p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 transition-colors"
+                            title="Logout">
+                            <span class="material-symbols-outlined">logout</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Welcome Banner -->
+        <div
+            class="mb-8 p-6 lg:p-8 bg-gradient-to-br from-[#106EBE] to-[#0FFCBE] rounded-2xl shadow-md text-white flex flex-col md:flex-row items-center justify-between relative overflow-hidden group">
+            <div class="absolute inset-0 bg-black/5"></div>
+            <span
+                class="material-symbols-outlined text-[10rem] absolute opacity-10 -right-4 -bottom-4 group-hover:scale-105 duration-500 ease-in-out">local_hospital</span>
+
+            <div class="relative z-10 w-full mb-4 md:mb-0">
+                <h2 class="text-2xl lg:text-3xl font-bold mb-2">Welcome Back, <span id="welcome-name">Doctor</span></h2>
+                <p class="text-white/90">Here's your clinical overview for today.</p>
+            </div>
+
+            <div class="relative z-10 w-full md:w-auto text-right">
+                <div
+                    class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-medium border border-white/30">
+                    <span class="material-symbols-outlined text-sm">event</span>
+                    <span id="current-date"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Total Reports Card -->
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-primary/5 card-hover">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-blue-50 dark:bg-blue-900/20 text-primary rounded-xl">
+                        <span class="material-symbols-outlined active-icon">content_paste</span>
+                    </div>
+                    <span
+                        class="text-xs font-medium text-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full">+12%
+                        this week</span>
+                </div>
+                <div>
+                    <h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Assessments</h3>
+                    <p id="stat-total" class="text-3xl font-bold mt-1">--</p>
+                </div>
+            </div>
+
+            <!-- Patients Today Card -->
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-primary/5 card-hover">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500 rounded-xl">
+                        <span class="material-symbols-outlined active-icon">groups</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium">Patients Seen Today</h3>
+                    <p id="stat-today" class="text-3xl font-bold mt-1">--</p>
+                </div>
+            </div>
+
+            <!-- System Accuracy Card -->
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-primary/5 card-hover">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-mint/10 text-mint dark:text-mint rounded-xl">
+                        <span class="material-symbols-outlined active-icon text-[#00c495]">analytics</span>
+                    </div>
+                    <span class="text-xs font-medium text-slate-500">Live calibration</span>
+                </div>
+                <div>
+                    <h3 class="text-slate-500 dark:text-slate-400 text-sm font-medium">System Accuracy</h3>
+                    <p id="stat-accuracy" class="text-3xl font-bold mt-1">--</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Records Table -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-primary/5 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-lg text-primary dark:text-mint flex items-center gap-2">
+                    <span class="material-symbols-outlined">how_to_reg</span> Patient Records
+                </h3>
+                <button
+                    class="text-sm font-medium text-primary hover:text-blue-700 hover:underline flex items-center gap-1 group">
+                    <span class="material-symbols-outlined text-sm">refresh</span> Refresh List
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead
+                        class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 uppercase text-xs font-semibold">
+                        <tr>
+                            <th class="px-6 py-4">ID</th>
+                            <th class="px-6 py-4">Patient Details</th>
+                            <th class="px-6 py-4">Procedure</th>
+                            <th class="px-6 py-4">Anxiety Level</th>
+                            <th class="px-6 py-4 text-right">Last Assessment</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patients-table-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                        <!-- Rows populated by JS -->
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-slate-500">
+                                <span class="material-symbols-outlined animate-spin mb-2">sync</span>
+                                <p>Loading records...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Check Auth
+        const doctorId = localStorage.getItem('doctor_id');
+        if (!doctorId) {
+            window.location.href = '/';
+        }
+
+        // Setup UI
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('theme-icon').innerText = isDark ? 'light_mode' : 'dark_mode';
+        }
+
+        // Initialize Theme
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-icon').innerText = 'light_mode';
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/';
+        }
+
+        // Load Data
+        async function loadProfile() {
+            try {
+                const res = await fetch(`/api/doctor/profile?doctorid=${doctorId}`);
+                const data = await res.json();
+                if (data.success) {
+                    const name = data.data.fullname || data.data.username;
+                    document.getElementById('profile-name').innerText = `Dr. ${name}`;
+                    document.getElementById('welcome-name').innerText = `Dr. ${name.split(' ')[0]}`;
+
+                    if (data.data.specialization) {
+                        document.getElementById('profile-role').innerText = data.data.specialization;
+                    }
+                    if (data.data.profile_photo) {
+                        document.getElementById('profile-img').src = data.data.profile_photo;
+                        document.getElementById('profile-img').classList.remove('hidden');
+                        document.getElementById('profile-placeholder').classList.add('hidden');
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to load profile', e);
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch(`/api/doctor/dashboard-stats?doctorid=${doctorId}`);
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('stat-total').innerText = data.data.total;
+                    document.getElementById('stat-today').innerText = data.data.today;
+                    document.getElementById('stat-accuracy').innerText = data.data.accuracy;
+                }
+            } catch (e) {
+                console.error('Failed to load stats', e);
+            }
+        }
+
+        function getAnxietyBadge(level) {
+            if (!level) return '<span class="text-slate-400">N/A</span>';
+            let colorClass = 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
+
+            level = level.toLowerCase();
+            if (level === 'low') {
+                colorClass = 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400';
+            } else if (level === 'moderate' || level === 'medium') {
+                colorClass = 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
+            } else if (level === 'high') {
+                colorClass = 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+            }
+
+            return `<span class="px-2.5 py-1 rounded-full text-xs font-medium ${colorClass} capitalize">${level}</span>`;
+        }
+
+        async function loadPatients() {
+            try {
+                const res = await fetch(`/api/patients?doctorid=${doctorId}&limit=20`);
+                const data = await res.json();
+                const tbody = document.getElementById('patients-table-body');
+
+                if (data.success && data.data.length > 0) {
+                    tbody.innerHTML = '';
+                    data.data.forEach(p => {
+                        const dateStr = p.last_assessment_date ? new Date(p.last_assessment_date).toLocaleString() : 'No assessments';
+
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group cursor-pointer';
+                        tr.innerHTML = `
+                            <td class="px-6 py-4 font-medium text-slate-600 dark:text-slate-300">#${p.patientid || p.id}</td>
+                            <td class="px-6 py-4">
+                                <div class="font-medium text-slate-900 dark:text-white">${p.fullname}</div>
+                                <div class="text-xs text-slate-500">${p.age || '?'} yr · ${p.gender || 'Unknown'}</div>
+                            </td>
+                            <td class="px-6 py-4 text-slate-600 dark:text-slate-300">${p.proceduretype || 'General'}</td>
+                            <td class="px-6 py-4">${getAnxietyBadge(p.latest_anxiety_level)}</td>
+                            <td class="px-6 py-4 text-right text-slate-500 text-xs">${dateStr}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-slate-500">
+                                <span class="material-symbols-outlined text-4xl mb-2 opacity-50">folder_open</span>
+                                <p>No records found yet.</p>
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (e) {
+                console.error('Failed to load patients', e);
+                document.getElementById('patients-table-body').innerHTML = `
+                    <tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Error loading data.</td></tr>
+                `;
+            }
+        }
+
+        // Init
+        loadProfile();
+        loadStats();
+        loadPatients();
+    </script>
+</body>
+
+</html>

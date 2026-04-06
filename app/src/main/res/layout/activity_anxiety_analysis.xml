@@ -4,8 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@color/editorial_bg"
     tools:context=".AnxietyAnalysisActivity">
+
+    <!-- Abstract Background Shape -->
+    <ImageView
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="-100dp"
+        android:layout_marginEnd="-150dp"
+        android:src="@drawable/bg_editorial_shape_abstract"
+        android:alpha="0.4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
@@ -17,225 +28,201 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="24dp">
+            android:padding="24dp">
 
-            <LinearLayout
-                android:id="@+id/headerLayout"
+            <!-- Header -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/card_background"
-                android:orientation="horizontal"
-                android:padding="24dp">
+                android:layout_marginTop="32dp">
 
                 <ImageView
                     android:id="@+id/btnBack"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:contentDescription="Back"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="#1A365D" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/editorial_text_primary" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginTop="24dp"
+                    android:text="Processing"
+                    android:fontFamily="@font/playfair_display_bold"
+                    android:textColor="@color/editorial_text_primary"
+                    android:textSize="32sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Anxiety Analysis"
-                        android:textColor="@color/text_primary"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvPatientInfo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Patient Name • ID"
-                        android:textColor="#596275"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Main Content Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardAnalysis"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/card_background">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvPatientInfo"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="32dp">
+                    android:layout_marginTop="8dp"
+                    android:text="Patient Assessment"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <!-- Captured Image Container -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        app:cardCornerRadius="60dp"
-                        app:cardElevation="0dp"
-                        app:cardBackgroundColor="#F3F4F6">
-
-                        <ImageView
-                            android:id="@+id/ivAnalyzedImage"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_pulse"
-                            app:tint="#CBD5E0" />
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Title -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:text="Analyzing Facial Features"
-                        android:textAlignment="center"
-                        android:textColor="#1A365D"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <!-- Description -->
-                    <TextView
-                        android:id="@+id/tvAnalysisDescription"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="AI is processing micro-expressions and facial landmarks..."
-                        android:textAlignment="center"
-                        android:textColor="#4A5568"
-                        android:textSize="14sp" />
-
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginVertical="24dp"
-                        android:background="#E2E8F0" />
-
-                    <!-- Progress Section -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Analysis Progress"
-                                android:textColor="#1A365D"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/tvProgressPercent"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0%"
-                                android:textColor="@color/primary_blue"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            style="@android:style/Widget.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:max="100"
-                            android:progress="0"
-                            android:progressDrawable="@drawable/bg_progress_bar_gradient"
-                            android:progressTint="@color/primary_blue" />
-                        
-                        <!-- Fallback for progress tint if drawable not compatible -->
-                    </LinearLayout>
-
-                    <!-- Current Stage Status -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:background="@drawable/bg_status_pill"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ProgressBar
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:indeterminateTint="@color/primary_blue" />
-
-                        <TextView
-                            android:id="@+id/tvStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Initializing model..."
-                            android:textColor="@color/primary_blue"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Retry Button (Initially Hidden) -->
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnRetry"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Try Again"
-                        android:visibility="gone"
-                        android:background="@drawable/bg_card_rounded"
-                        android:backgroundTint="#EF4444"
-                        android:textColor="#FFFFFF" />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- AI Insight Tip -->
+            <!-- Main Content Area -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:background="@drawable/bg_scan_instruction"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="64dp">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_info_outline"
-                    app:tint="#1A365D" />
+                <!-- Image Frame -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    app:cardCornerRadius="80dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/editorial_card_bg">
+
+                    <ImageView
+                        android:id="@+id/ivAnalyzedImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_pulse"
+                        android:padding="40dp"
+                        app:tint="@color/editorial_divider" />
+                </androidx.cardview.widget.CardView>
+
+                <!-- Status Headline -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="Decoding Markers"
+                    android:fontFamily="@font/playfair_display_bold"
+                    android:textColor="@color/editorial_text_primary"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/tvAnalysisDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="AI is processing physiological indicators..."
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="14sp"
+                    android:textAlignment="center" />
+
+                <!-- Progress Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Analysis Progress"
+                            android:fontFamily="@font/inter_family"
+                            android:textColor="@color/editorial_text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvProgressPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0%"
+                            android:fontFamily="@font/inter_family"
+                            android:textColor="@color/editorial_text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressTint="@color/editorial_text_primary" />
+                </LinearLayout>
+
+                <!-- Current Action Status -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:background="@drawable/bg_editorial_card"
+                    android:backgroundTint="@color/editorial_card_bg"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:indeterminateTint="@color/editorial_text_primary" />
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Initializing AI..."
+                        android:fontFamily="@font/inter_family"
+                        android:textColor="@color/editorial_text_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Retry Button -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnRetry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="32dp"
+                    android:text="Restart Session"
+                    android:visibility="gone"
+                    android:background="@drawable/bg_editorial_button_secondary"
+                    android:paddingHorizontal="32dp"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_primary" />
+
+            </LinearLayout>
+
+            <!-- Insight Box -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:background="@drawable/bg_editorial_card"
+                android:orientation="horizontal"
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Our AI analyzes 9 key facial points to determine stress levels with high accuracy."
-                    android:textColor="#374151"
+                    android:text="Scanning 9 unique key facial landmarks for high-precision diagnostic metrics."
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
                     android:textSize="13sp"
-                    android:lineSpacingExtra="2dp" />
+                    android:fontStyle="italic" />
             </LinearLayout>
 
         </LinearLayout>

@@ -4,7 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background">
+    android:background="@color/editorial_bg">
+
+    <!-- Abstract Background Shape -->
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="-100dp"
+        android:layout_marginEnd="-150dp"
+        android:src="@drawable/bg_editorial_shape_abstract"
+        android:alpha="0.4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -23,45 +34,46 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Profile &amp; Settings"
-                android:textColor="@color/text_primary"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="32dp"
+                android:text="Doctor Profile"
+                android:fontFamily="@font/playfair_display_bold"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="32sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Manage your personal information"
-                android:textColor="@color/nature_text_secondary"
-                android:textSize="16sp" />
+                android:layout_marginTop="12dp"
+                android:text="Account &amp; System Preferences"
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_secondary"
+                android:textSize="14sp" />
 
-            <!-- Profile Form Container (Premium Card) -->
+            <!-- Profile Form Container -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="40dp"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/card_background">
+                app:cardBackgroundColor="@color/editorial_card_bg">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:padding="28dp">
 
                 <!-- Avatar -->
                 <ImageView
                     android:id="@+id/ivProfileImage"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="32dp"
                     android:src="@drawable/ic_person"
-                    android:background="@drawable/bg_card_rounded"
-                    android:backgroundTint="#E0F2FE"
+                    android:background="@drawable/bg_editorial_card"
+                    android:backgroundTint="@color/editorial_divider"
                     android:padding="16dp"
                     android:scaleType="centerCrop" />
 
@@ -69,113 +81,132 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Full Name"
-                    android:textColor="@color/blue_dark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:text="FULL NAME"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1" />
 
                 <EditText
                     android:id="@+id/etFullName"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="56dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_input_nature"
-                    android:hint="Dr. Jane Doe"
+                    android:background="@drawable/bg_editorial_card"
+                    android:backgroundTint="@color/editorial_bg"
+                    android:hint="Full Name"
+                    android:fontFamily="@font/inter_family"
                     android:inputType="textPersonName"
                     android:paddingHorizontal="16dp"
-                    android:textColor="@color/nature_text_primary"
-                    android:textSize="16sp" />
+                    android:textColor="@color/editorial_text_primary"
+                    android:textSize="15sp" />
 
                 <!-- Specialization -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Specialization"
-                    android:textColor="@color/blue_dark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="20dp"
+                    android:text="SPECIALIZATION"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1" />
 
                 <EditText
                     android:id="@+id/etSpecialization"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="56dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_input_nature"
-                    android:hint="e.g. Cardiologist"
+                    android:background="@drawable/bg_editorial_card"
+                    android:backgroundTint="@color/editorial_bg"
+                    android:hint="e.g. Clinical Psychologist"
+                    android:fontFamily="@font/inter_family"
                     android:inputType="text"
                     android:paddingHorizontal="16dp"
-                    android:textColor="@color/nature_text_primary"
-                    android:textSize="16sp" />
+                    android:textColor="@color/editorial_text_primary"
+                    android:textSize="15sp" />
 
                 <!-- Clinic Name -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Clinic / Hospital Name"
-                    android:textColor="@color/blue_dark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="20dp"
+                    android:text="INSTITUTION / CLINIC"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
 
                 <EditText
                     android:id="@+id/etClinicName"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="56dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_input_nature"
-                    android:hint="e.g. City General Hospital"
+                    android:background="@drawable/bg_editorial_card"
+                    android:backgroundTint="@color/editorial_bg"
+                    android:hint="Institution Name"
+                    android:fontFamily="@font/inter_family"
                     android:inputType="text"
                     android:paddingHorizontal="16dp"
-                    android:textColor="@color/nature_text_primary"
-                    android:textSize="16sp" />
+                    android:textColor="@color/editorial_text_primary"
+                    android:textSize="15sp" />
 
                 <!-- Phone Number -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Phone Number"
-                    android:textColor="@color/blue_dark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="20dp"
+                    android:text="CONTACT NUMBER"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
 
                 <EditText
                     android:id="@+id/etPhone"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="56dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_input_nature"
-                    android:hint="+1 234 567 8900"
+                    android:background="@drawable/bg_editorial_card"
+                    android:backgroundTint="@color/editorial_bg"
+                    android:hint="Phone Number"
+                    android:fontFamily="@font/inter_family"
                     android:inputType="phone"
                     android:maxLength="10"
                     android:paddingHorizontal="16dp"
-                    android:textColor="@color/nature_text_primary"
-                    android:textSize="16sp" />
+                    android:textColor="@color/editorial_text_primary"
+                    android:textSize="15sp" />
 
                 <!-- Email (Read Only) -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Email Address"
-                    android:textColor="@color/blue_dark"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="20dp"
+                    android:text="EMAIL ADDRESS"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1" />
 
                 <EditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="56dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_input_nature"
-                    android:backgroundTint="#F0FFF4"
+                    android:background="@drawable/bg_editorial_card"
+                    android:backgroundTint="@color/editorial_divider"
                     android:enabled="false"
-                    android:hint="doctor@example.com"
+                    android:hint="doctor@anxisense.com"
+                    android:fontFamily="@font/inter_family"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="16dp"
-                    android:textColor="@color/nature_text_secondary"
-                    android:textSize="16sp" />
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="15sp" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -186,12 +217,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/bg_card_rounded"
-                android:backgroundTint="@color/blue_dark"
-                android:text="Save Changes"
+                android:background="@drawable/bg_editorial_button_primary"
+                android:text="Update Profile"
                 android:textAllCaps="false"
+                android:fontFamily="@font/inter_family"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <!-- Logout Button -->
@@ -200,18 +230,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="32dp"
-                android:background="@drawable/bg_card_rounded"
-                android:backgroundTint="#FEE2E2"
-                android:text="Logout Session"
+                android:layout_marginBottom="48dp"
+                android:background="@drawable/bg_editorial_button_secondary"
+                android:text="Log Out Session"
                 android:textAllCaps="false"
-                android:textColor="#DC2626"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:drawableStart="@drawable/ic_logout"
-                android:drawableTint="#DC2626"
-                android:drawablePadding="16dp"
-                android:paddingStart="16dp" />
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_primary"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

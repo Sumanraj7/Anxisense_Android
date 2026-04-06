@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_bcrypt import Bcrypt
 import MySQLdb
 import os
@@ -82,7 +82,11 @@ elif not app.debug:
 # --------------------
 @app.route("/", methods=["GET"])
 def home():
-    return {"message": "AnxiSense Backend Running"}
+    return render_template("index.html")
+
+@app.route("/dashboard", methods=["GET"])
+def dashboard():
+    return render_template("anxisense_dashboard.html")
 
 @app.route("/uploads/profiles/<filename>")
 def serve_profile_photo(filename):
@@ -96,13 +100,21 @@ def serve_profile_photo(filename):
 def calculate_anxiety(emotions):
     fear = float(emotions.get("fear", 0))
     sad = float(emotions.get("sad", 0))
+    angry = float(emotions.get("angry", 0))
+    disgust = float(emotions.get("disgust", 0))
     surprise = float(emotions.get("surprise", 0))
 
+    # Weight negative and aroused emotions
     anxiety_score = (
-            0.5 * fear +
-            0.3 * sad +
-            0.2 * surprise
+        1.0 * fear +
+        0.8 * sad +
+        0.6 * angry +
+        0.5 * disgust +
+        0.4 * surprise
     )
+
+    # Cap at 100
+    anxiety_score = min(100.0, anxiety_score)
 
     if anxiety_score < 40:
         level = "Low"

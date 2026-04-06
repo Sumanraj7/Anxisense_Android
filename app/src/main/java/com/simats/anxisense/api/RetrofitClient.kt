@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit // [NEW IMPORT]
 
 object  RetrofitClient {
 
-    private const val BASE_URL = "http://10.56.99.8:5000/api/"
+    private const val BASE_URL = "http://10.153.120.8:5000/api/"
 
     val instance: DoctorApi by lazy {
         

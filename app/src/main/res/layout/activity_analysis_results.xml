@@ -4,118 +4,141 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@color/editorial_bg"
     tools:context=".AnalysisResultsActivity">
+
+    <!-- Abstract Background Shape -->
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="-100dp"
+        android:layout_marginEnd="-150dp"
+        android:src="@drawable/bg_editorial_shape_abstract"
+        android:alpha="0.5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Top Navigation Bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/card_background"
-        android:elevation="1dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@mipmap/ic_launcher_round" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="AnxietySense"
-            android:textColor="@color/blue_dark"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/btnExportPdf"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_upload"
-            app:tint="#475569" />
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@mipmap/ic_launcher_round" />
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/bg_card_rounded"
-            android:backgroundTint="#F1F5F9"
-            android:padding="6dp"
-            android:src="@drawable/ic_person"
-            app:tint="@color/text_secondary" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="AnxiSense"
+                android:fontFamily="@font/playfair_display_bold"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/btnExportPdf"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_upload"
+                app:tint="@color/editorial_text_secondary" />
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_editorial_card"
+                android:padding="6dp"
+                android:src="@drawable/ic_person"
+                app:tint="@color/editorial_text_secondary" />
+        </LinearLayout>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/editorial_divider" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/footer"
+        app:layout_constraintBottom_toTopOf="@+id/footerPadding"
         app:layout_constraintTop_toBottomOf="@id/topBar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="24dp">
 
-            <!-- Back & Title -->
+            <!-- Back & Breadcrumb -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/btnBack"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_back"
-                    app:tint="@color/text_secondary" />
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_back"
+                    app:tint="@color/editorial_text_secondary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="PATIENT RECORDS"
-                    android:textColor="@color/text_secondary"
+                    android:text="Back to Records"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05"/>
             </LinearLayout>
 
-            <!-- Analyzed Face Image -->
+            <!-- Profile Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="32dp"
                 app:cardCornerRadius="50dp"
-                app:cardElevation="2dp">
+                app:cardElevation="0dp">
 
                 <ImageView
                     android:id="@+id/ivAnalyzedFace"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
+                    android:background="@color/editorial_divider"
                     android:src="@drawable/ic_person" />
             </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:layout_gravity="center"
-                android:text="Anxiety Analysis"
-                android:textColor="#1E293B"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:text="Report"
+                android:fontFamily="@font/playfair_display_bold"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="36sp" />
 
-            <!-- Quick Patient Info Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,344 +147,208 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Patient: "
-                    android:textColor="#64748B" />
-
-                <TextView
                     android:id="@+id/tvPatientNameLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Akash Ranga"
-                    android:textColor="#1E293B"
-                    android:textStyle="bold" />
+                    android:text="Patient Name"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_primary"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
 
                 <View
                     android:layout_width="4dp"
                     android:layout_height="4dp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="8dp"
-                    android:background="@drawable/circular_progress_bar"
-                    android:backgroundTint="#94A3B8" />
+                    android:layout_marginHorizontal="12dp"
+                    android:background="@drawable/bg_editorial_card"
+                    android:backgroundTint="@color/editorial_divider" />
 
                 <TextView
                     android:id="@+id/tvPatientIdLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ID: #AS-9921"
-                    android:textColor="#1E293B"
-                    android:textStyle="bold" />
+                    android:text="ID: #AS-0000"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- Main Dashboard Layout -->
-            <LinearLayout
+            <!-- Anxiety Score Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="vertical">
+                android:layout_marginTop="40dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/editorial_card_bg">
 
-                <!-- Score Card -->
-                <androidx.cardview.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/card_background">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ANXIETY INDEX"
+                        android:fontFamily="@font/inter_family"
+                        android:textColor="@color/editorial_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1" />
 
                     <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvAnxietyScoreBig"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00"
+                            android:fontFamily="@font/playfair_display_bold"
+                            android:textColor="@color/editorial_text_primary"
+                            android:textSize="72sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="16sp"
+                            android:text="/100"
+                            android:fontFamily="@font/inter_family"
+                            android:textColor="@color/editorial_text_secondary"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvAnxietyLevelText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="Calculation Pending"
+                        android:fontFamily="@font/inter_family"
+                        android:textColor="@color/editorial_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                    <ProgressBar
+                        android:id="@+id/pbAnxietyCircle"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_marginTop="16dp"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressDrawable="@android:drawable/progress_horizontal" />
+
+                    <View
+                        android:layout_width="40dp"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="24dp"
+                        android:background="@color/editorial_divider" />
+
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="24dp">
+                        android:text="The analysis identifies behavioral patterns and physiological indicators captured during the session."
+                        android:fontFamily="@font/inter_family"
+                        android:textColor="@color/editorial_text_secondary"
+                        android:textSize="14sp"
+                        android:lineSpacingExtra="4dp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="AI-GENERATED ANXIETY SCORE"
-                            android:textColor="#64748B"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
+            <!-- Metrics Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="16dp"
+                android:text="Detailed Metrics"
+                android:fontFamily="@font/playfair_display_bold"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="22sp" />
 
-                        <!-- Circular Progress -->
-                        <FrameLayout
-                            android:layout_width="160dp"
-                            android:layout_height="160dp"
-                            android:layout_marginTop="20dp">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/editorial_card_bg">
 
-                            <ProgressBar
-                                android:id="@+id/pbAnxietyCircle"
-                                style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:indeterminate="false"
-                                android:max="100"
-                                android:progress="49"
-                                android:progressDrawable="@drawable/circular_progress_bar" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/tvAnxietyScoreBig"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="49"
-                                    android:textColor="#1E293B"
-                                    android:textSize="48sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="out of 100"
-                                    android:textColor="#64748B"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
-                        </FrameLayout>
-
-                        <TextView
-                            android:id="@+id/tvAnxietyLevelText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:background="@drawable/bg_card_rounded"
-                            android:backgroundTint="#FFF7ED"
-                            android:paddingHorizontal="24dp"
-                            android:paddingVertical="8dp"
-                            android:text="Moderate Anxiety"
-                            android:textColor="#EA580C"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:gravity="center"
-                            android:text="The AI detected significant patterns consistent with moderate anxiety levels during the session."
-                            android:textColor="#64748B"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Emotion Analysis Card -->
-                <androidx.cardview.widget.CardView
+                <LinearLayout
+                    android:id="@+id/llKeyMetricsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp">
+                    android:orientation="vertical"
+                    android:padding="20dp" />
+            </androidx.cardview.widget.CardView>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
+            <!-- scale level guide could be added here if needed, keeping it clean for now -->
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical">
+            <View android:layout_width="match_parent" android:layout_height="100dp"/>
 
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:scaleType="centerInside"
-                                android:src="@drawable/ic_analysis"
-                                app:tint="#1E293B" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="EMOTION ANALYSIS"
-                                android:textColor="#1E293B"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llKeyMetricsContainer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:orientation="vertical" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Scale Level Guide Card -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:src="@drawable/ic_info_outline"
-                                app:tint="#64748B" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="ANXIETY SCALE LEVEL GUIDE"
-                                android:textColor="#64748B"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <!-- Guide Items -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-                            
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0-39 RANGE" android:textSize="10sp" android:textColor="#94A3B8" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Low Anxiety" android:textColor="#059669" android:textSize="14sp" android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/bg_card_rounded"
-                                android:backgroundTint="#ECFDF5"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="4dp"
-                                android:text="STABLE"
-                                android:textColor="#059669"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="40-69 RANGE" android:textSize="10sp" android:textColor="#94A3B8" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Moderate Anxiety" android:textColor="#EA580C" android:textSize="14sp" android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/bg_card_rounded"
-                                android:backgroundTint="#FFF7ED"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="4dp"
-                                android:text="MONITOR"
-                                android:textColor="#EA580C"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="70-100 RANGE" android:textSize="10sp" android:textColor="#94A3B8" android:textStyle="bold"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="High Anxiety" android:textColor="#DC2626" android:textSize="14sp" android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/bg_card_rounded"
-                                android:backgroundTint="#FEF2F2"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="4dp"
-                                android:text="URGENT"
-                                android:textColor="#DC2626"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                
-                <!-- Spacer -->
-                <View android:layout_width="match_parent" android:layout_height="40dp"/>
-
-            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Footer Buttons -->
+    <View
+        android:id="@+id/footerPadding"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toTopOf="@id/footer" />
+
+    <!-- Action Bar -->
     <LinearLayout
         android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
-        android:elevation="8dp"
-        android:orientation="horizontal"
-        android:padding="16dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/editorial_divider" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnNewScan"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_card_rounded"
-            android:backgroundTint="#F1F5F9"
-            android:text="+ New Scan"
-            android:textAllCaps="false"
-            android:textColor="#334155" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnViewRecommendations"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="2"
-            android:background="@drawable/bg_card_rounded"
-            android:backgroundTint="#059669"
-            android:text="View Recommendations ➔"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnNewScan"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_editorial_button_secondary"
+                android:text="New Session"
+                android:textAllCaps="false"
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_primary" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnViewRecommendations"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1.5"
+                android:background="@drawable/bg_editorial_button_primary"
+                android:text="Clinical Notes"
+                android:textAllCaps="false"
+                android:fontFamily="@font/inter_family"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

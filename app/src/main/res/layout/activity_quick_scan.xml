@@ -4,82 +4,87 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@color/editorial_bg"
     tools:context=".QuickScanActivity">
+
+    <!-- Abstract Background Shape -->
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="-100dp"
+        android:layout_marginStart="-100dp"
+        android:src="@drawable/bg_editorial_shape_abstract"
+        android:alpha="0.6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Content Container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/includedBottomNav"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Icon Circle -->
-        <View
-            android:id="@+id/bgIconCircle"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:background="@drawable/bg_card_rounded"
-            android:backgroundTint="@color/card_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/ivScanIcon"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="📸"
-            android:textSize="48sp"
-            app:layout_constraintBottom_toBottomOf="@id/bgIconCircle"
-            app:layout_constraintEnd_toEndOf="@id/bgIconCircle"
-            app:layout_constraintStart_toStartOf="@id/bgIconCircle"
-            app:layout_constraintTop_toTopOf="@id/bgIconCircle"/>
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvScanTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Quick Scan"
-            android:textColor="@color/text_primary"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bgIconCircle" />
+            <!-- Title Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Session"
+                android:fontFamily="@font/playfair_display_bold"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="42sp"
+                android:textAlignment="center" />
 
-        <!-- Subtitle -->
-        <TextView
-            android:id="@+id/tvScanSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Start a new anxiety assessment"
-            android:textColor="@color/text_secondary"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScanTitle" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Ready for anxiety assessment?"
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_secondary"
+                android:textSize="18sp"
+                android:textAlignment="center" />
 
-        <!-- Action Button -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnBeginQuickScan"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/bg_card_rounded"
-            android:backgroundTint="@color/blue_dark"
-            android:paddingHorizontal="48dp"
-            android:text="Begin Assessment"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScanSubtitle" />
+            <View
+                android:layout_width="60dp"
+                android:layout_height="1dp"
+                android:layout_marginVertical="40dp"
+                android:background="@color/editorial_divider" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
+                android:text="This automated scan provides a preliminary assessment based on facial expressions and physiological indicators."
+                android:fontFamily="@font/inter_family"
+                android:textColor="@color/editorial_text_secondary"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:lineSpacingExtra="4dp" />
+
+            <!-- Action Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnBeginQuickScan"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_editorial_button_primary"
+                android:text="Begin Scan"
+                android:textAllCaps="false"
+                android:fontFamily="@font/inter_family"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:letterSpacing="0.02" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -37,6 +37,13 @@ class DoctorDashboardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Top Navigation Profile Icon
+        val ivProfileIcon = findViewById<ImageView>(R.id.ivProfileIcon)
+        ivProfileIcon.setOnClickListener {
+            val intent = android.content.Intent(this, ProfileSettingsActivity::class.java)
+            startActivity(intent)
+        }
+
         // Bottom Navigation Listeners
         navDashboard.setOnClickListener { updateBottomNavState(navDashboard, "Dashboard") }
         navScan.setOnClickListener { 

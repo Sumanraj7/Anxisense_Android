@@ -4,55 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@color/editorial_bg"
     tools:context=".FacialScanActivity">
 
-    
+    <!-- Top Navigation Bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/card_background"
-        android:elevation="1dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="#1E293B" />
-
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Facial Scan Assessment"
-                android:textColor="@color/text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/editorial_text_primary" />
 
-            <TextView
-                android:id="@+id/tvSubtitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Patient Name • ID"
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp" />
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Facial Assessment"
+                    android:fontFamily="@font/playfair_display_bold"
+                    android:textColor="@color/editorial_text_primary"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tvSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Analysis in progress"
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/editorial_divider" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -62,219 +70,314 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+        <LinearLayout 
+            android:layout_width="match_parent" 
+            android:layout_height="wrap_content" 
+            android:orientation="vertical" 
+            android:padding="24dp">
 
-            
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="Camera Preview"
-                android:textColor="#1E293B"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
+            <!-- Camera Preview Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="32dp"
+                app:cardCornerRadius="24dp"
                 app:cardElevation="0dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="#F8F9FA">
+                <androidx.constraintlayout.widget.ConstraintLayout 
+                    android:layout_width="match_parent" 
+                    android:layout_height="wrap_content" 
+                    android:background="@color/editorial_card_bg">
 
-                    
-                    <androidx.camera.view.PreviewView android:id="@+id/cameraPreview" android:layout_width="0dp" android:layout_height="0dp" android:background="#000000" app:layout_constraintDimensionRatio="H,3:4" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.camera.view.PreviewView 
+                        android:id="@+id/cameraPreview" 
+                        android:layout_width="0dp" 
+                        android:layout_height="0dp" 
+                        android:background="#000000" 
+                        app:layout_constraintDimensionRatio="H,3:4" 
+                        app:layout_constraintEnd_toEndOf="parent" 
+                        app:layout_constraintStart_toStartOf="parent" 
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    
-                    <ImageView android:id="@+id/ivUploadedImage" android:layout_width="match_parent" android:layout_height="0dp" android:background="#000000" android:contentDescription="Uploaded patient image" android:scaleType="centerCrop" android:visibility="gone" app:layout_constraintDimensionRatio="H,3:4" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView 
+                        android:id="@+id/ivUploadedImage" 
+                        android:layout_width="match_parent" 
+                        android:layout_height="0dp" 
+                        android:background="#000000" 
+                        android:scaleType="centerCrop" 
+                        android:visibility="gone" 
+                        app:layout_constraintDimensionRatio="H,3:4" 
+                        app:layout_constraintEnd_toEndOf="parent" 
+                        app:layout_constraintStart_toStartOf="parent" 
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    
-                    <View android:id="@+id/faceGuideOverlay" android:layout_width="180dp" android:layout_height="270dp" android:layout_marginTop="40dp" android:background="@drawable/bg_face_guide_overlay" app:layout_constraintEnd_toEndOf="@id/cameraPreview" app:layout_constraintStart_toStartOf="@id/cameraPreview" app:layout_constraintTop_toTopOf="@id/cameraPreview" />
+                    <View 
+                        android:id="@+id/faceGuideOverlay" 
+                        android:layout_width="180dp" 
+                        android:layout_height="270dp" 
+                        android:layout_marginTop="40dp" 
+                        android:background="@drawable/bg_face_guide_overlay" 
+                        app:layout_constraintEnd_toEndOf="@id/cameraPreview" 
+                        app:layout_constraintStart_toStartOf="@id/cameraPreview" 
+                        app:layout_constraintTop_toTopOf="@id/cameraPreview" />
 
-                    
-                    <TextView android:id="@+id/tvGuideText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:background="#80000000" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:text="Position face within guide" android:textColor="#FFFFFF" android:textSize="12sp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/faceGuideOverlay" />
+                    <TextView 
+                        android:id="@+id/tvGuideText" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_marginTop="12dp" 
+                        android:background="@drawable/bg_editorial_card"
+                        android:backgroundTint="#80000000"
+                        android:paddingHorizontal="16dp" 
+                        android:paddingVertical="8dp" 
+                        android:text="Face within guide" 
+                        android:fontFamily="@font/inter_family"
+                        android:textColor="#FFFFFF" 
+                        android:textSize="12sp" 
+                        app:layout_constraintEnd_toEndOf="parent" 
+                        app:layout_constraintStart_toStartOf="parent" 
+                        app:layout_constraintTop_toBottomOf="@id/faceGuideOverlay" />
 
-                    
-                    <androidx.cardview.widget.CardView android:id="@+id/cardScanningStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="12dp" android:visibility="gone" app:cardBackgroundColor="@color/mint_accent" app:cardCornerRadius="6dp" app:cardElevation="3dp" app:layout_constraintStart_toStartOf="@id/cameraPreview" app:layout_constraintTop_toTopOf="@id/cameraPreview">
+                    <TextView 
+                        android:id="@+id/tvLandmarksCount" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_margin="12dp" 
+                        android:background="@drawable/bg_editorial_card"
+                        android:backgroundTint="#80000000"
+                        android:paddingHorizontal="12dp" 
+                        android:paddingVertical="6dp" 
+                        android:text="Landmarks: 0" 
+                        android:fontFamily="@font/inter_family"
+                        android:textColor="#FFFFFF" 
+                        android:textSize="10sp" 
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/cameraPreview" 
+                        app:layout_constraintStart_toStartOf="@id/cameraPreview" />
 
-                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal" android:padding="10dp">
+                    <TextView 
+                        android:id="@+id/tvCameraLabel" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_margin="12dp" 
+                        android:background="@drawable/bg_editorial_card"
+                        android:backgroundTint="#80000000"
+                        android:paddingHorizontal="12dp" 
+                        android:paddingVertical="6dp" 
+                        android:text="Front Camera" 
+                        android:fontFamily="@font/inter_family"
+                        android:textColor="#FFFFFF" 
+                        android:textSize="10sp" 
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/cameraPreview" 
+                        app:layout_constraintEnd_toEndOf="@id/cameraPreview" />
 
-                            <ProgressBar android:layout_width="18dp" android:layout_height="18dp" android:indeterminateTint="#106EBE" />
+                    <androidx.cardview.widget.CardView 
+                        android:id="@+id/cardScanningStatus" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_margin="16dp" 
+                        android:visibility="gone" 
+                        app:cardBackgroundColor="#FFFFFF" 
+                        app:cardCornerRadius="12dp" 
+                        app:cardElevation="2dp" 
+                        app:layout_constraintStart_toStartOf="@id/cameraPreview" 
+                        app:layout_constraintTop_toTopOf="@id/cameraPreview">
 
-                            <TextView android:id="@+id/tvScanningStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Analyzing..." android:textColor="#106EBE" android:textSize="11sp" />
+                        <LinearLayout 
+                            android:layout_width="wrap_content" 
+                            android:layout_height="wrap_content" 
+                            android:gravity="center_vertical" 
+                            android:orientation="horizontal" 
+                            android:padding="12dp">
+
+                            <ProgressBar 
+                                android:layout_width="16dp" 
+                                android:layout_height="16dp" 
+                                android:indeterminateTint="@color/editorial_text_primary" />
+
+                            <TextView 
+                                android:id="@+id/tvScanningStatus" 
+                                android:layout_width="wrap_content" 
+                                android:layout_height="wrap_content" 
+                                android:layout_marginStart="8dp" 
+                                android:text="Analyzing..." 
+                                android:fontFamily="@font/inter_family"
+                                android:textColor="@color/editorial_text_primary" 
+                                android:textSize="12sp" 
+                                android:textStyle="bold"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                    
-                    <TextView android:id="@+id/tvCameraLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="12dp" android:background="#80000000" android:drawableStart="@drawable/ic_camera_alt" android:drawablePadding="4dp" android:drawableTint="#FFFFFF" android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:text="FRONT CAMERA" android:textColor="#FFFFFF" android:textSize="9sp" android:visibility="gone" app:layout_constraintEnd_toEndOf="@id/cameraPreview" app:layout_constraintTop_toTopOf="@id/cameraPreview" />
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton 
+                        android:id="@+id/btnSwitchCamera" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_margin="16dp" 
+                        android:src="@drawable/ic_camera_switch" 
+                        app:fabSize="mini" 
+                        app:tint="#FFFFFF" 
+                        app:backgroundTint="#40000000" 
+                        app:elevation="0dp" 
+                        app:layout_constraintEnd_toEndOf="@id/cameraPreview" 
+                        app:layout_constraintTop_toTopOf="@id/cameraPreview" />
 
-                    
-                    <TextView android:id="@+id/tvLandmarksCount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="12dp" android:background="#80000000" android:paddingHorizontal="8dp" android:paddingVertical="4dp" android:text="Landmarks: 0/9" android:textAlignment="center" android:textColor="#FFFFFF" android:textSize="11sp" android:visibility="gone" app:layout_constraintBottom_toBottomOf="@id/cameraPreview" app:layout_constraintStart_toStartOf="@id/cameraPreview" />
-
-                    
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton android:id="@+id/btnSwitchCamera" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="12dp" android:contentDescription="Switch Camera" android:src="@drawable/ic_camera_switch" app:fabSize="mini" app:tint="#FFFFFF" app:backgroundTint="#80000000" app:elevation="0dp" app:layout_constraintEnd_toEndOf="@id/cameraPreview" app:layout_constraintTop_toTopOf="@id/cameraPreview" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton android:id="@+id/btnUploadImage" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="12dp" android:contentDescription="Upload Image" android:src="@drawable/ic_upload" app:tint="#106EBE" app:backgroundTint="@color/mint_accent" app:layout_constraintBottom_toBottomOf="@id/cameraPreview" app:layout_constraintEnd_toEndOf="@id/cameraPreview" />
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton 
+                        android:id="@+id/btnUploadImage" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:layout_margin="16dp" 
+                        android:src="@drawable/ic_upload" 
+                        app:tint="#FFFFFF" 
+                        app:backgroundTint="@color/editorial_text_primary" 
+                        app:layout_constraintBottom_toBottomOf="@id/cameraPreview" 
+                        app:layout_constraintEnd_toEndOf="@id/cameraPreview" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            
-            <LinearLayout android:id="@+id/layoutScanProgress" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:orientation="vertical" android:visibility="gone">
+            <!-- Scanning Progress -->
+            <LinearLayout 
+                android:id="@+id/layoutScanProgress" 
+                android:layout_width="match_parent" 
+                android:layout_height="wrap_content" 
+                android:layout_marginBottom="24dp" 
+                android:orientation="vertical" 
+                android:visibility="gone">
 
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:orientation="horizontal">
+                <LinearLayout 
+                    android:layout_width="match_parent" 
+                    android:layout_height="wrap_content" 
+                    android:layout_marginBottom="8dp" 
+                    android:orientation="horizontal">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Scanning Progress" android:textColor="@color/blue_dark" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView 
+                        android:layout_width="0dp" 
+                        android:layout_height="wrap_content" 
+                        android:layout_weight="1" 
+                        android:text="Scan Progress" 
+                        android:fontFamily="@font/inter_family"
+                        android:textColor="@color/editorial_text_primary" 
+                        android:textSize="14sp" 
+                        android:textStyle="bold" />
 
-                    <TextView android:id="@+id/tvProgressPercent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0%" android:textColor="@color/blue_dark" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView 
+                        android:id="@+id/tvProgressPercent" 
+                        android:layout_width="wrap_content" 
+                        android:layout_height="wrap_content" 
+                        android:text="0%" 
+                        android:fontFamily="@font/playfair_display_bold"
+                        android:textColor="@color/editorial_text_primary" 
+                        android:textSize="16sp" />
                 </LinearLayout>
 
-                <ProgressBar android:id="@+id/progressBar" style="@android:style/Widget.ProgressBar.Horizontal" android:layout_width="match_parent" android:layout_height="6dp" android:max="100" android:progress="0" android:progressTint="@color/mint_accent" />
+                <ProgressBar 
+                    android:id="@+id/progressBar" 
+                    style="@android:style/Widget.ProgressBar.Horizontal" 
+                    android:layout_width="match_parent" 
+                    android:layout_height="4dp" 
+                    android:max="100" 
+                    android:progress="0" 
+                    android:progressTint="@color/editorial_text_primary" />
             </LinearLayout>
 
-            
-            <LinearLayout android:id="@+id/layoutActionButtons" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:orientation="horizontal" android:visibility="gone" android:weightSum="2">
+            <!-- Action Buttons -->
+            <LinearLayout 
+                android:id="@+id/layoutActionButtons" 
+                android:layout_width="match_parent" 
+                android:layout_height="wrap_content" 
+                android:layout_marginBottom="24dp" 
+                android:orientation="horizontal" 
+                android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnCapturePhoto" android:layout_width="0dp" android:layout_height="48dp" android:layout_marginEnd="8dp" android:layout_weight="1" android:background="@drawable/bg_card_rounded" android:backgroundTint="@color/mint_accent" android:drawableStart="@drawable/ic_camera_alt" android:drawableTint="#106EBE" android:paddingStart="12dp" android:paddingEnd="12dp" android:text="Capture" android:textAllCaps="false" android:textColor="#106EBE" android:textSize="14sp" />
+                <androidx.appcompat.widget.AppCompatButton 
+                    android:id="@+id/btnCapturePhoto" 
+                    android:layout_width="0dp" 
+                    android:layout_height="50dp" 
+                    android:layout_marginEnd="8dp" 
+                    android:layout_weight="1" 
+                    android:background="@drawable/bg_editorial_button_secondary" 
+                    android:text="Capture" 
+                    android:textAllCaps="false" 
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_primary" 
+                    android:textSize="14sp" />
 
-                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnStopScan" android:layout_width="0dp" android:layout_height="48dp" android:layout_marginStart="8dp" android:layout_weight="1" android:background="@drawable/bg_card_rounded" android:backgroundTint="#DC2626" android:text="Stop Scan" android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="14sp" />
+                <androidx.appcompat.widget.AppCompatButton 
+                    android:id="@+id/btnStopScan" 
+                    android:layout_width="0dp" 
+                    android:layout_height="50dp" 
+                    android:layout_marginStart="8dp" 
+                    android:layout_weight="1" 
+                    android:background="@drawable/bg_editorial_button_primary" 
+                    android:backgroundTint="#B00020"
+                    android:text="Stop Scan" 
+                    android:textAllCaps="false" 
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="#FFFFFF" 
+                    android:textSize="14sp" />
             </LinearLayout>
 
-            
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnStartScan"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/bg_card_rounded"
-                android:backgroundTint="@color/blue_dark"
-                android:text="Start Scan Session"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/bg_editorial_button_primary"
+                android:text="Initialize Session"
                 android:textAllCaps="false"
+                android:fontFamily="@font/inter_family"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:letterSpacing="0.02" />
 
-            
+            <!-- Instructions Section -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:text="Scanning Instructions"
-                android:textColor="#1E293B"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="16dp"
+                android:text="Instructions"
+                android:fontFamily="@font/playfair_display_bold"
+                android:textColor="@color/editorial_text_primary"
+                android:textSize="22sp" />
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
+                android:background="@drawable/bg_editorial_card"
+                android:backgroundTint="@color/editorial_card_bg"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFFFFF"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:layout_marginBottom="12dp"
+                    android:text="1. Ensure patient is seated in a neutral position with face clearly visible."
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="2. Maintain adequate front lighting to minimize shadows on facial landmarks."
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp" />
 
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:text="1."
-                            android:textColor="#0C5696"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Ensure patient is seated in neutral position"
-                            android:textColor="#475569"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:text="2."
-                            android:textColor="#0C5696"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Adequate front lighting on patient's face"
-                            android:textColor="#475569"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:text="3."
-                            android:textColor="#0C5696"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Patient should maintain natural expression"
-                            android:textColor="#475569"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:text="4."
-                            android:textColor="#0C5696"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Scan duration: approximately 5 seconds"
-                            android:textColor="#475569"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="3. The session will take approximately 5 seconds for complete data capture."
+                    android:fontFamily="@font/inter_family"
+                    android:textColor="@color/editorial_text_secondary"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp" />
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

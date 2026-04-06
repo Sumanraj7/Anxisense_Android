@@ -1,4 +1,4 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/card_background" />
+    <solid android:color="@color/editorial_card_bg" />
     <corners android:radius="24dp" />
 </shape>

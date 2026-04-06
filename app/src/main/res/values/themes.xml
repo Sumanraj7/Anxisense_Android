@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.AnxiSense" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary colors -->
-        <item name="colorPrimary">@color/blue_dark</item>
-        <item name="colorPrimaryDark">@color/blue_dark</item>
-        <item name="colorAccent">@color/blue_primary</item>
+    <style name="Theme.AnxiSense" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Editorial Primary colors -->
+        <item name="colorPrimary">@color/editorial_text_primary</item>
+        <item name="colorPrimaryDark">@color/editorial_text_primary</item>
+        <item name="colorAccent">@color/editorial_text_secondary</item>
 
         <!-- Background colors -->
-        <item name="android:windowBackground">@color/app_background</item>
-        <item name="android:colorBackground">@color/app_background</item>
-        <item name="colorSurface">@color/card_background</item>
+        <item name="android:windowBackground">@color/editorial_bg</item>
+        <item name="android:colorBackground">@color/editorial_bg</item>
+        <item name="colorSurface">@color/editorial_card_bg</item>
+
+        <!-- Typography -->
+        <item name="android:fontFamily">@font/inter_family</item>
+        <item name="fontFamily">@font/inter_family</item>
+        <item name="android:textColorPrimary">@color/editorial_text_primary</item>
+        <item name="android:textColorSecondary">@color/editorial_text_secondary</item>
 
         <!-- Status bar -->
-        <item name="android:statusBarColor">@color/blue_dark</item>
+        <item name="android:statusBarColor">@color/editorial_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
         
         <!-- Navigation bar -->
-        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/editorial_bg</item>
         <item name="android:windowLightNavigationBar">true</item>
+
+        <!-- Insets and Edge-to-Edge -->
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <!-- Splash Theme to prevent white screen flicker -->
-    <style name="Theme.AnxiSense.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.AnxiSense.Splash" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:statusBarColor">@color/blue_dark</item>
+        <item name="android:statusBarColor">@color/editorial_bg</item>
     </style>
 
 

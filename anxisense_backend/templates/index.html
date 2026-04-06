@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnxiSense Clinical - Login</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+
+    <!-- Tailwind CSS with configuration -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#106EBE',
+                        mint: '#0FFCBE',
+                        'background-light': '#f8fafc',
+                        'background-dark': '#0f172a'
+                    },
+                    fontFamily: {
+                        display: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 min-h-screen flex items-center justify-center transition-colors duration-300">
+
+    <!-- Dark Mode Toggle -->
+    <button onclick="toggleTheme()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-primary/10 transition-colors">
+        <span id="theme-icon" class="material-symbols-outlined text-primary dark:text-mint">dark_mode</span>
+    </button>
+
+    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-xl rounded-2xl overflow-hidden border border-primary/10 mx-4">
+        
+        <!-- Left Side: Branding / Gradient Hero -->
+        <div class="bg-gradient-to-br from-[#106EBE] to-[#0FFCBE] p-10 flex flex-col justify-center items-center text-white relative overflow-hidden group">
+            <div class="absolute inset-0 bg-black/10 transition-opacity"></div>
+            <!-- Animated background symbol -->
+            <span class="material-symbols-outlined text-[12rem] absolute opacity-10 -right-10 -bottom-10 group-hover:scale-105 duration-500 ease-in-out">health_and_safety</span>
+            
+            <div class="relative z-10 text-center">
+                <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg border border-white/30">
+                    <span class="material-symbols-outlined text-5xl active-icon text-white">psychiatry</span>
+                </div>
+                <h1 class="text-3xl font-bold mb-2">AnxiSense</h1>
+                <p class="text-white/90 text-sm font-medium tracking-wide uppercase">Clinical Edition</p>
+                <p class="mt-6 text-sm text-white/80 max-w-xs mx-auto">Advanced facial analysis and anxiety tracking for medical professionals.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="p-10 flex flex-col justify-center">
+            
+            <!-- Step 1: Request OTP -->
+            <div id="step-email" class="transition-opacity duration-300">
+                <h2 class="text-2xl font-bold mb-2 text-primary dark:text-mint">Doctor Portal</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-8">Enter your registered email to receive an OTP.</p>
+                
+                <form id="email-form" onsubmit="requestOTP(event)">
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium mb-1 dark:text-slate-300">Email Address</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">mail</span>
+                            <input type="email" id="email" required class="w-full pl-10 pr-4 py-2.5 rounded-xl border-primary/20 bg-white dark:bg-slate-800 dark:border-slate-700 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow" placeholder="dr.smith@clinic.com">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="btn-request" class="w-full bg-primary hover:bg-blue-700 text-white py-2.5 rounded-xl font-medium transition-all group flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                        <span>Send OTP</span>
+                        <span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+                    </button>
+                    
+                    <div id="email-error" class="mt-3 text-sm text-red-500 text-center hidden"></div>
+                </form>
+            </div>
+
+            <!-- Step 2: Verify OTP -->
+            <div id="step-otp" class="hidden transition-opacity duration-300">
+                <button onclick="goBack()" class="flex items-center gap-1 text-sm text-primary mb-6 hover:underline">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span> Back
+                </button>
+                
+                <h2 class="text-2xl font-bold mb-2 text-primary dark:text-mint">Verify Identity</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-8">We've sent a 6-digit code to <br><span id="display-email" class="font-medium text-slate-800 dark:text-slate-200"></span></p>
+                
+                <form id="otp-form" onsubmit="verifyOTP(event)">
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-1 dark:text-slate-300">6-Digit OTP</label>
+                        <input type="text" id="otp" required pattern="[0-9]{6}" maxlength="6" class="w-full text-center tracking-[0.5em] text-2xl py-3 rounded-xl border-primary/20 bg-white dark:bg-slate-800 dark:border-slate-700 focus:ring-2 focus:ring-mint focus:border-mint transition-shadow" placeholder="••••••">
+                    </div>
+                    
+                    <button type="submit" id="btn-verify" class="w-full bg-gradient-to-r from-primary to-mint hover:opacity-90 text-white py-2.5 rounded-xl font-medium transition-all group flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                        <span>Verify & Login</span>
+                        <span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">login</span>
+                    </button>
+                    
+                    <div id="otp-error" class="mt-3 text-sm text-red-500 text-center hidden"></div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Check if already logged in
+        if (localStorage.getItem('doctor_id')) {
+            window.location.href = '/dashboard';
+        }
+
+        let currentEmail = '';
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('theme-icon').innerText = isDark ? 'light_mode' : 'dark_mode';
+        }
+
+        // Initialize Theme
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-icon').innerText = 'light_mode';
+        }
+
+        async function requestOTP(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('email').value.trim();
+            const btn = document.getElementById('btn-request');
+            const err = document.getElementById('email-error');
+            
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm block">sync</span> <span>Sending...</span>';
+            btn.disabled = true;
+            err.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/doctor/send-otp', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email: emailInput })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentEmail = emailInput;
+                    document.getElementById('display-email').innerText = currentEmail;
+                    document.getElementById('step-email').classList.add('hidden');
+                    document.getElementById('step-otp').classList.remove('hidden');
+                } else {
+                    err.innerText = data.message || 'Failed to send OTP';
+                    err.classList.remove('hidden');
+                }
+            } catch (error) {
+                err.innerText = 'Network error occurred.';
+                err.classList.remove('hidden');
+            } finally {
+                btn.innerHTML = '<span>Send OTP</span><span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>';
+                btn.disabled = false;
+            }
+        }
+
+        async function verifyOTP(e) {
+            e.preventDefault();
+            const otpInput = document.getElementById('otp').value.trim();
+            const btn = document.getElementById('btn-verify');
+            const err = document.getElementById('otp-error');
+            
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm block">sync</span> <span>Verifying...</span>';
+            btn.disabled = true;
+            err.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/doctor/verify-otp', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email: currentEmail, otp: otpInput })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Save to localStorage
+                    localStorage.setItem('doctor_id', data.doctor.id);
+                    localStorage.setItem('doctor_name', data.doctor.fullname || data.doctor.username);
+                    localStorage.setItem('doctor_email', data.doctor.email);
+                    
+                    // Redirect to dashboard
+                    window.location.href = '/dashboard';
+                } else {
+                    err.innerText = data.message || 'Invalid OTP';
+                    err.classList.remove('hidden');
+                }
+            } catch (error) {
+                err.innerText = 'Network error occurred.';
+                err.classList.remove('hidden');
+            } finally {
+                btn.innerHTML = '<span>Verify & Login</span><span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">login</span>';
+                btn.disabled = false;
+            }
+        }
+
+        function goBack() {
+            document.getElementById('step-otp').classList.add('hidden');
+            document.getElementById('step-email').classList.remove('hidden');
+            document.getElementById('otp').value = '';
+            document.getElementById('otp-error').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

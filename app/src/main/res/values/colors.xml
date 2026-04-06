@@ -9,51 +9,34 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     
-    <!-- Primary Brand Colors -->
-    <color name="blue_primary">#106EBE</color>
-    <color name="primary_blue">#106EBE</color>
-    <color name="blue_dark">#0C5696</color>
-    <color name="mint_accent">#0FFCBE</color>
-    <color name="mint_dark">#0D8A6A</color> <!-- Darker version for text contrast -->
+    <!-- Primary Brand & Core Colors -->
+    <color name="editorial_bg">#FFFFFF</color>
+    <color name="editorial_text_primary">#000000</color>
+    <color name="editorial_text_secondary">#444444</color>
+    <color name="editorial_card_bg">#F5F5F5</color>
+    <color name="editorial_accent_shape">#111111</color>
+    <color name="editorial_divider">#EAEAEA</color>
     
-    <!-- Background Colors -->
-    <color name="app_background">#F8FAFC</color>
-    <color name="card_background">#FFFFFF</color>
-    <color name="bg_light_blue">#F0F9FF</color>
-    <color name="background_light">#F8FAFC</color>
-    
-    <!-- Text Colors -->
-    <color name="text_primary">#1E293B</color>
-    <color name="text_secondary">#2D3748</color> <!-- Updated to darker version -->
     <color name="text_hint">#94A3B8</color>
-    <color name="info_text">#1A365D</color>
-    <color name="info_blue">#3182CE</color>
-    
-    
-    <!-- UI Element Colors -->
     <color name="stroke_color">#E2E8F0</color>
     <color name="error_red">#E53E3E</color>
+    <color name="nav_unselected">#4A5568</color>
     
-    <!-- Anxiety Level Colors -->
-    <color name="anxiety_level_0">#22C55E</color>          <!-- Green - No Anxiety -->
-    <color name="anxiety_level_1_3">#84CC16</color>        <!-- Light Green - Mild -->
-    <color name="anxiety_level_4_6">#FBBF24</color>        <!-- Yellow/Orange - Moderate -->
-    <color name="anxiety_level_7_9">#F97316</color>        <!-- Orange - Severe -->
-    <color name="anxiety_level_8_9">#EF4444</color>        <!-- Red - Very Severe -->
-    <color name="anxiety_level_10">#DC2626</color>         <!-- Dark Red - Worst Possible -->
+    <!-- Anxiety Level Colors (Functional Editorial) -->
+    <color name="anxiety_low">#10B981</color>
+    <color name="anxiety_moderate">#F59E0B</color>
+    <color name="anxiety_high">#EF4444</color>
+    
+    <color name="anxiety_low_bg">#ECFDF5</color>
+    <color name="anxiety_moderate_bg">#FFF7ED</color>
+    <color name="anxiety_high_bg">#FEF2F2</color>
 
-    <!-- Nature Theme Colors -->
-    <color name="nature_bg_start">#EBF8FF</color> <!-- Emerald-50 -->
-    <color name="nature_bg_mid">#F0F9FF</color>   <!-- Sky-50 -->
-    <color name="nature_bg_end">#EBF8FF</color>   <!-- Teal-50 -->
-
-    <color name="forest_green">#0C5696</color>    <!-- Green-800 -->
-    <color name="emerald_primary">#0FFCBE</color> <!-- Emerald-500 -->
-    <color name="teal_accent">#0FFCBE</color>     <!-- Teal-500 -->
-    <color name="sky_accent">#0EA5E9</color>      <!-- Sky-500 -->
-
-    <color name="nature_border">#5CFDE5</color>   <!-- Green-200 -->
-    <color name="nature_text_primary">#0C487A</color> <!-- Darkened slightly -->
-    <color name="nature_text_secondary">#136230</color> <!-- Darkened for better contrast -->
-    <color name="nav_unselected">#4A5568</color> <!-- New specific color for unselected items -->
+    <!-- Emotion Colors (Editorial Palette) -->
+    <color name="emotion_angry">#EF4444</color>
+    <color name="emotion_happy">#10B981</color>
+    <color name="emotion_sad">#3B82F6</color>
+    <color name="emotion_fear">#8B5CF6</color>
+    <color name="emotion_surprise">#F59E0B</color>
+    <color name="emotion_disgust">#14B8A6</color>
+    <color name="emotion_neutral">#6B7280</color>
 </resources>
